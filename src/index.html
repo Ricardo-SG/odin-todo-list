@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odin Project: To Do List</title>
+</head>
+<body>
+    <div id="main-container">
+        <div id="header">
+            <div class="web-title">To Do List Manager</div>
+            <div class="sub-header">
+                <div class="project-title">
+                    Project title
+                </div>
+                <div class="header-options">
+                    <select id="project-selector" name="project-list">
+                        <option value="select-text" default>Select project</option>
+                        <option value="new-project">Create new project</option>
+                    </select>
+                </div>
+            </div>
+        </div> <!-- header end -->
+        <div id="board-content">
+            <div class="form-popup invisible" id="div-form">   
+                <form id="todo-form" action="#">
+                    <input type="text"    id="input-title"      name="title"    placeholder="The title of your task"  required minlength="3">
+                    <input type="date"    id="input-date"       name="date">
+                    
+                    <select               id="input-priority"   name="priority">
+                        <option value="0" selected>Low</option>
+                        <option value="1"         >Medium</option>
+                        <option value="2"         >High</option>
+                        <option value="3"         >Critical</option>
+                      </select>
+                    <textarea             id="input-desc"       name="desc"     placeholder="a description if you will"  maxlength="250" ></textarea>
+                    <button type="button" id="btn-form-new-todo">Confirm todo</button>
+                </form>
+            </div>
+
+            <div id="todo-holder">
+
+            </div>
+
+
+            <button id="btn-new-todo">+</button>
+            <button id="btn-sort">REFRESH AND SORT</button>
+        </div> <!-- board end -->
+    </div>
+</body>
+</html>
