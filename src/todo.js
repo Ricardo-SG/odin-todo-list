@@ -64,6 +64,9 @@ export const projectFactory = (title, description) => {
     const getToDos = () => {
         return toDos;
     };
+    const setToDos = (toDos) => {
+        toDos.push(toDos);
+    };
 
     const getTitle = () => {
         return title;
@@ -137,7 +140,7 @@ export const projectFactory = (title, description) => {
     }
 
 
-    return {title, description, addToDo, getToDos, getTitle, sortToDos};
+    return {title, description, toDos, addToDo, getToDos, setToDos, getTitle, sortToDos};
     
 };
 
@@ -149,12 +152,42 @@ export const userFactory = () => {
         const addProject = (project) => {
             projects.push(project);
         }
+        const getProjectNumber = () => {
+            return projects.length;
+        }
 
         const getProjects = () => {
             return projects;
         }
 
-     return {addProject,getProjects};
+        const setProjects = (projectList) => {
+            // to clean the projects array --> projects.splice(0,projects.length);
+
+            // console.log('projectList: ' + projectList);
+            // console.table(projectList);
+
+            projectList.forEach(prj => {
+                let newPrj = projectFactory(prj.title, prj.description);
+                prj.toDos.forEach(todo => {
+                    // console.table(todo);
+                    let newToDo = todoFactory(todo.title, todo.description, todo.dueDate, todo.priority);
+                    newPrj.addToDo(newToDo);
+                })
+
+                //newPrj.setToDos = prj.toDos;
+                projects.push(newPrj);
+
+            })
+            
+        }
+
+        const getProject = (index) => {
+            return projects[index];
+        }
+
+
+
+     return {addProject, getProjectNumber, getProjects, setProjects, getProject};
 };
 
 
@@ -186,11 +219,6 @@ export const manageData = (() => {
         }
     };
 
-    const newTodo = (project, toDo, node) => {
-        /* we add to the project a new todo */
-        project.addToDo(toDo);
-        printTodo(toDo, node);
-    }
 
     const printTodo = (toDo, node) => {
 
@@ -207,6 +235,9 @@ export const manageData = (() => {
         const cardLabel    = document.createElement('label');
         const cardCheck    = document.createElement('input');
         const cardSlider   = document.createElement('span');
+
+        const btnEdit      = document.createElement('button');
+        const btnDelete    = document.createElement('button');
 
     
         /* The Checkbutton */
@@ -227,11 +258,16 @@ export const manageData = (() => {
         cardDueDate.className   = 'card-due-date';
         cardDesc.className      = 'card-description';
         cardPriority.className  = 'priority'; 
+        btnEdit.className       = 'btn-edit';
+        btnDelete.className     = 'btn-delete';
 
         cardTitle.innerText    = toDo.title;
         cardDueDate.innerText  = toDo.dueDate;
         cardDesc.innerText     = toDo.description;
         cardPriority.innerText = toDo.priorityValue();
+        btnEdit.innerText      ='Edit task';
+        btnDelete.innerText    ='Delete task';
+
 
         // if the checkbutton has to be checked */
         if (toDo.getState() == 'done') {
@@ -269,16 +305,22 @@ export const manageData = (() => {
         });
 
     }
-    return {setBoard, newTodo};
+    return {setBoard};
 })();
 
 /* This object will recover the data inserted in the form, validate it, and if everything is okay return a todo object.*/
 export const manageForm = (() => {
 
-    const divform       = document.getElementById("div-form");  
     const form          = document.forms['todo-form'];
+    const divform       = document.getElementById("div-form");  
     const title         = document.getElementById("input-title"); 
+    const dueDate       = document.getElementById("input-date");
+    const priority      = document.getElementById("input-priority");
+    const desc          = document.getElementById("input-desc");
     let   isVisible     = false;
+
+    const varDate       = new Date();
+    const today         =`${varDate.getFullYear()}-${(varDate.getMonth() + 1)}-${varDate.getDate()}`;
 
     const validate = () => {
         console.log('<validate>');
@@ -301,11 +343,18 @@ export const manageForm = (() => {
         const dDescr    = form.elements.desc.value;
         const dDueDate  = transformDate(form.elements.date.value);
         const dPriority = form.elements.priority.value;
-        const dToDo     = todoFactory(title,descr,dueDate,priority);
+        const dToDo     = todoFactory(dTitle,dDescr,dDueDate,dPriority);
         
         return dToDo;
 
     } 
+
+    const cleanData = () => {
+
+        form.reset();
+        dueDate.setAttribute('value', today);
+
+    }
 
     const transformDate = (stringDate) => {
         // We transform from YYYY-MM-DD to DD-MM-YYYY, we return as an string.
@@ -320,10 +369,12 @@ export const manageForm = (() => {
             isVisible = false;
         }
         else {
+            cleanData();
             isVisible = true;
-            console.log('title: ' + title);
             title.focus({focusVisible: true});
+            
         }
+
 
 
     }
@@ -331,4 +382,5 @@ export const manageForm = (() => {
     return {validate, getData, visible};
 
 })();
+
 
