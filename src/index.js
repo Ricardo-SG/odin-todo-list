@@ -2,7 +2,11 @@
 import './styles.scss';
 import {todoFactory, projectFactory, userFactory, manageData, manageForm} from './todo.js';
 import {storageData} from './saveData.js';
+import {thePickOfDestiniy} from './test.js';
 /* ------------------------------------------------------------------ */
+thePickOfDestiniy();
+
+
 // variables we're gonna use for index.js
 const user          = userFactory(); /* The user */
 let   currentProject;
@@ -54,6 +58,8 @@ function loadListeners() {
         currentProject.sortToDos();  // We sort the list
         manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board
     });
+    futureListeners('.btn-delete', 'click', (e) => { deleteButton(e);}); // for the delete buttons
+    futureListeners('.btn-edit', 'click', () => { console.log('pa k kieres saber eso jajaj saludos');}); // for the edit buttons
 }
 
 
@@ -69,6 +75,41 @@ function newFormButton () {
    }  
     
 };
+
+function deleteButton(event) {
+    console.log('<deleteButton>');
+    const delBtn = event.target.id;
+    const index = parseInt(delBtn.substr(11));
+    console.log('delBtn:' +delBtn+'index: '+index);
+    
+    currentProject.subtractToDo(index);
+    currentProject.sortToDos();
+    storageData.saveUserData(user);  // we save the user data since we added a new todo
+    manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board        
+}
+
+function futureListeners(selector, event, handler) {
+    const rootElement = document.querySelector('body'); // cambiar por el board?
+    rootElement.addEventListener(event, (e) => {
+        let targetElement = e.target;
+        let iWantToBreakFree = false;
+        while(targetElement != null) {
+            if (targetElement.matches(selector)) {
+                handler(e);
+                targetElement = null; // we break the loop
+                console.log('AND I WILL BREAK THE LOOP FOREEEEEVER');
+            }
+            else {
+                console.log('THIS LOOP NEVER ENDS');
+                targetElement = targetElement.parentElement;
+            }
+            
+            
+        }
+    });
+};
+        
+
 
 // for test, we set user and project
 
@@ -123,11 +164,11 @@ x 3) Ordenar los toDos (Poner botón de ordenar/refrescar)
 		prioridad menor > prioridad mayor
 			fecha menor > fecha mayor
 x 4) Hacer popup absoluto para insertar nuevos todos o, en un futuro, editarlos.
-5) Poner botón de borrado de ToDos.
+x 5) Poner botón de borrado de ToDos.
 6) Poner botón de editado de ToDos.
 7) Permitir cambiar de proyecto.
 8) Permitir crear proyectos.
 9) Visibilizar la descripción de proyectos.
-10) añadir librería para guardar datos en local. Ser capaz de guardar y leer en local.
+x 10) añadir librería para guardar datos en local. Ser capaz de guardar y leer en local.
 11) ¿Rehacer la interfaz?
 */

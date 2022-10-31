@@ -61,9 +61,25 @@ export const projectFactory = (title, description) => {
         toDos.push(todo);
     };
 
+    const subtractToDo = (index) => {
+        console.log('<subtractToDo> ' +index );
+        console.log('before --- ');
+        console.table(toDos);
+        
+        toDos.splice(index, 1);
+        console.log('middle --- ');
+        console.table(toDos);
+        for (let i=index;i<toDos.length;i++) {
+            toDos[i].setId(i); /* We adjust the ID of the todos */
+        }
+
+        console.log('after --- ');
+        console.table(toDos);
+    }
     const getToDos = () => {
         return toDos;
     };
+
     const setToDos = (toDos) => {
         toDos.push(toDos);
     };
@@ -123,8 +139,6 @@ export const projectFactory = (title, description) => {
 
     }
 
-
-
     const compareTime = (a,b) => {
         // We parse the string of due date to real object date
         const date1 = parse(a.dueDate, 'dd-MM-yyyy', new Date());
@@ -140,7 +154,7 @@ export const projectFactory = (title, description) => {
     }
 
 
-    return {title, description, toDos, addToDo, getToDos, setToDos, getTitle, sortToDos};
+    return {title, description, toDos, addToDo, subtractToDo, getToDos, setToDos, getTitle, sortToDos};
     
 };
 
@@ -207,7 +221,7 @@ export const manageData = (() => {
 
         // 3) We refill it with every TODO object we've got in the object Project.
         ToDoList.forEach(toDo => {
-            printTodo(toDo, node); 
+            printTodo(toDo, node, project); 
         });
 
     };
@@ -220,7 +234,7 @@ export const manageData = (() => {
     };
 
 
-    const printTodo = (toDo, node) => {
+    const printTodo = (toDo, node, project) => {
 
         const todoCard     = document.createElement('div');
         const visibleDiv   = document.createElement('div');
@@ -247,9 +261,16 @@ export const manageData = (() => {
         cardCheck.className     = 'card-check';
         cardSlider.className    = 'slider round';
 
+        /* The delete and edit button */
+        btnDelete.id            = 'btn-delete-'+toDo.getId();
+        btnEdit.id              = 'btn-edit-'+toDo.getId();
+        btnEdit.className       = 'btn-edit';
+        btnDelete.className     = 'btn-delete';
+        btnEdit.innerText       = 'Edit task';
+        btnDelete.innerText     = 'Delete task';
 
 
-        /* All classes (except check) */
+        /* All classes (except check) and some id. */
         todoCard.className      = 'todo-card';
         visibleDiv.className    = 'main-todo';
         clickDiv.className      = 'click-todo';
@@ -258,15 +279,12 @@ export const manageData = (() => {
         cardDueDate.className   = 'card-due-date';
         cardDesc.className      = 'card-description';
         cardPriority.className  = 'priority'; 
-        btnEdit.className       = 'btn-edit';
-        btnDelete.className     = 'btn-delete';
+
 
         cardTitle.innerText    = toDo.title;
         cardDueDate.innerText  = toDo.dueDate;
         cardDesc.innerText     = toDo.description;
         cardPriority.innerText = toDo.priorityValue();
-        btnEdit.innerText      ='Edit task';
-        btnDelete.innerText    ='Delete task';
 
 
         // if the checkbutton has to be checked */
@@ -281,7 +299,7 @@ export const manageData = (() => {
         
         clickDiv.append(cardTitle, cardDueDate, cardPriority);
         cardLabel.append(cardCheck,cardSlider);
-        visibleDiv.append(cardLabel, clickDiv);
+        visibleDiv.append(cardLabel, clickDiv, btnEdit, btnDelete);
         toggleDiv.appendChild(cardDesc);
         todoCard.append(visibleDiv, toggleDiv); 
         node.appendChild(todoCard);    
@@ -296,7 +314,6 @@ export const manageData = (() => {
 
         /* this changes the ToDo as done or not done */
         cardCheck.addEventListener('click', () => {
-
             toDo.toggleState();
             cardCheck.classList.toggle  ('checked');
             cardTitle.classList.toggle  ('striked');
