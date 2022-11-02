@@ -7,6 +7,43 @@
     <title>The Odin Project: To Do List</title>
 </head>
 <body>
+    <div id="background-blocker">
+        <div class="form-popup invisible" id="div-form">   
+            <form id="todo-form" action="#">
+                <input type="text"    id="input-title"      name="title"    placeholder="The title of your task"  required minlength="3">
+                <input type="date"    id="input-date"       name="date">
+                
+                <select               id="input-priority"   name="priority">
+                    <option value="0" selected>Low</option>
+                    <option value="1"         >Medium</option>
+                    <option value="2"         >High</option>
+                    <option value="3"         >Critical</option>
+                </select>
+                <textarea             id="input-desc"       name="desc"     placeholder="a description if you will"  maxlength="250" ></textarea>
+                
+                <div class="form-button-container">
+                    <button type="button" id="btn-form-confirm">Confirm todo</button>
+                    <button type="button" id="btn-form-edit">Confirm edit</button>
+                    <button type="button" id="btn-form-cancel">Cancel</button>
+                </div>
+                
+            </form>
+        </div>
+        <div class="form-popup invisible" id="project-div-form">   
+            <form id="project-form" action="#">
+                <input type="text"    id="input-title"      name="title"    placeholder="The title of your project"  required minlength="3">
+                <textarea             id="input-desc"       name="desc"     placeholder="a description if you will"  maxlength="250" ></textarea>
+                
+                <div class="form-button-container">
+                    <button type="button" id="btn-form-confirm">Confirm todo</button>
+                    <button type="button" id="btn-form-edit">Confirm edit</button>
+                    <button type="button" id="btn-form-cancel">Cancel</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
     <div id="main-container">
         <div id="header">
             <div class="web-title">To Do List Manager</div>
@@ -23,29 +60,15 @@
             </div>
         </div> <!-- header end -->
         <div id="board-content">
-            <div class="form-popup invisible" id="div-form">   
-                <form id="todo-form" action="#">
-                    <input type="text"    id="input-title"      name="title"    placeholder="The title of your task"  required minlength="3">
-                    <input type="date"    id="input-date"       name="date">
-                    
-                    <select               id="input-priority"   name="priority">
-                        <option value="0" selected>Low</option>
-                        <option value="1"         >Medium</option>
-                        <option value="2"         >High</option>
-                        <option value="3"         >Critical</option>
-                      </select>
-                    <textarea             id="input-desc"       name="desc"     placeholder="a description if you will"  maxlength="250" ></textarea>
-                    <button type="button" id="btn-form-new-todo">Confirm todo</button>
-                </form>
-            </div>
+            <button id="btn-new-todo">+</button>
 
             <div id="todo-holder">
 
             </div>
 
 
-            <button id="btn-new-todo">+</button>
-            <button id="btn-sort">REFRESH AND SORT</button>
+            
+            
         </div> <!-- board end -->
     </div>
 </body>

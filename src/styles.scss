@@ -14,13 +14,13 @@ $grey: rgba(138, 126, 143, 0.6);
     padding: 0;
 }
 
-/* Clases generales */
-.invisible {
-  display:none;
-}
 
-.striked {
-  text-decoration: line-through;
+.blocker {
+  position:absolute;
+  background-color: hsla(0, 0%, 0%, 0.438);
+  height:100vh;
+  width:100vw;
+  z-index:2;
 }
 
 
@@ -163,9 +163,11 @@ $grey: rgba(138, 126, 143, 0.6);
     height: 100px;
     
   }
-  #btn-form-new-todo {
-    display:block;
-    margin:auto;
+  #btn-form-confirm, 
+  #btn-form-edit, 
+  #btn-form-cancel {
+    //display:block;
+    //margin:auto;
  
     background-color: #04AA6D;
     color: white;
@@ -177,7 +179,9 @@ $grey: rgba(138, 126, 143, 0.6);
     opacity: 0.7;
   }
    
-  #btn-form-new-todo:hover {
+  #btn-form-confirm:hover, 
+  #btn-form-edit:hover, 
+  #btn-form-cancel:hover {
     opacity: 1;
   }
 
@@ -276,3 +280,12 @@ $grey: rgba(138, 126, 143, 0.6);
 
 
 
+
+/* Clases generales */
+.invisible {
+  display:none;
+}
+
+.striked {
+  text-decoration: line-through;
+}

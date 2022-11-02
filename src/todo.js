@@ -80,6 +80,11 @@ export const projectFactory = (title, description) => {
         return toDos;
     };
 
+    const getToDo = (index) => {
+        return toDos[index];
+    };
+
+
     const setToDos = (toDos) => {
         toDos.push(toDos);
     };
@@ -110,6 +115,12 @@ export const projectFactory = (title, description) => {
 
             }
         ); 
+
+        // we got to rearrange the ID of the todo
+        // Id should be the same as the index in the array
+        for (let i=0;i<toDos.length;i++) {
+            toDos[i].setId(i);
+        }
 
     }
 
@@ -154,7 +165,7 @@ export const projectFactory = (title, description) => {
     }
 
 
-    return {title, description, toDos, addToDo, subtractToDo, getToDos, setToDos, getTitle, sortToDos};
+    return {title, description, toDos, addToDo, subtractToDo, getToDos, getToDo, setToDos, getTitle, sortToDos};
     
 };
 
@@ -328,16 +339,17 @@ export const manageData = (() => {
 /* This object will recover the data inserted in the form, validate it, and if everything is okay return a todo object.*/
 export const manageForm = (() => {
 
+    const divBlocker    = document.getElementById('background-blocker');
     const form          = document.forms['todo-form'];
     const divform       = document.getElementById("div-form");  
     const title         = document.getElementById("input-title"); 
     const dueDate       = document.getElementById("input-date");
     const priority      = document.getElementById("input-priority");
     const desc          = document.getElementById("input-desc");
+    const confirmBtn    = document.getElementById("btn-form-confirm");
+    const editBtn       = document.getElementById("btn-form-edit");
+    //const cancelBtn     = document.getElementById("btn-form-cancel"); not used for now
     let   isVisible     = false;
-
-    const varDate       = new Date();
-    const today         =`${varDate.getFullYear()}-${(varDate.getMonth() + 1)}-${varDate.getDate()}`;
 
     const validate = () => {
         console.log('<validate>');
@@ -358,7 +370,7 @@ export const manageForm = (() => {
         //const form     = document.forms['todo-form'];
         const dTitle    = form.elements.title.value;
         const dDescr    = form.elements.desc.value;
-        const dDueDate  = transformDate(form.elements.date.value);
+        const dDueDate  = transformDate(form.elements.date.value, 'yyyy-MM-dd', 'dd-MM-yyyy');
         const dPriority = form.elements.priority.value;
         const dToDo     = todoFactory(dTitle,dDescr,dDueDate,dPriority);
         
@@ -369,35 +381,114 @@ export const manageForm = (() => {
     const cleanData = () => {
 
         form.reset();
-        dueDate.setAttribute('value', today);
+        dueDate.setAttribute('value', getDateToday());
+        setVisible(confirmBtn, true); 
+        setVisible(editBtn, false);
+        
+
+        
 
     }
 
-    const transformDate = (stringDate) => {
-        // We transform from YYYY-MM-DD to DD-MM-YYYY, we return as an string.
-        const date = parse(stringDate, 'yyyy-MM-dd', new Date());
-        return format(date, 'dd-MM-yyyy');
+    const transformDate = (stringDate, originFormat, destinyFormat) => {
+        // We transform from  origin to destiny, we return as an string.
+
+        const date = parse(stringDate, originFormat, new Date());
+        return format(date, destinyFormat);
     }
+
 
     const visible = () => {
         console.log('<visible>');
         divform.classList.toggle('invisible');
         if (isVisible == true) {
             isVisible = false;
+            setBlocker(false);
         }
         else {
             cleanData();
             isVisible = true;
+            setBlocker(true);
             title.focus({focusVisible: true});
             
         }
+    };
 
+    const setBlocker = (activate) => {
+        if (activate) {
+            divBlocker.classList.add('blocker');
+        }
+        else {
+            divBlocker.classList.remove('blocker');
+        }      
+        
+    };
 
+    const setVisible = (htmlObject, state) => {
+        console.log('<setVisible>')
+        
+        console.log('htmlObject.id: ' + htmlObject.id);
+        const currentClasses = htmlObject.className;
+        const currentState   = !currentClasses.includes('invisible');
+
+        console.log('currentClasses: ' + currentClasses);
+        console.log('currentState  : ' + currentState);
+        console.log('state         : ' + state);
+
+        if (state != currentState) {
+            state?
+                htmlObject.classList.remove('invisible'):
+                htmlObject.classList.add('invisible');
+        }
+/*
+        if (state != currentState) {
+            if (state) {
+                console.log('remove invisible');
+                htmlObject.classList.remove('invisible');
+                console.log('htmlObject.className: '+ htmlObject.className);
+
+            } else {
+                console.log('remove invisible');
+                htmlObject.classList.remove('invisible');
+                console.log('htmlObject.className: '+ htmlObject.className);
+            }
+        }*/
 
     }
 
-    return {validate, getData, visible};
+    const setForm = (todo) => {
+
+        console.log('<setForm> ' +todo);
+        console.log('todo.title    : ' + todo.title         );
+        console.log('todo.priority : ' + todo.priority      );
+        console.log('todo.desc     : ' + todo.description   );
+        console.log('todo.dueDate  : ' + todo.dueDate       );
+        title.value    = todo.title;
+        priority.value = todo.priority;
+        desc.value     = todo.description;
+
+        dueDate.setAttribute('value', transformDate(todo.dueDate,'dd-MM-yyyy','yyyy-MM-dd'));
+        editBtn.setAttribute('todo-id', todo.getId());
+
+        setVisible(confirmBtn, false); 
+        setVisible(editBtn, true);
+        
+    
+    }
+
+    return {validate, getData, visible, setForm};
 
 })();
+
+
+function getDateToday() {
+    // We return yyyy-MM-dd of today
+    const varDate = new Date();
+    const year    = varDate.getFullYear();
+    const month   = varDate.getMonth()+1;
+    const day     = parseInt(varDate.getDate()) < 10? '0'+varDate.getDate():varDate.getDate();
+    
+    return`${year}-${(month)}-${day}`;
+}
 
 

@@ -1,26 +1,28 @@
 /* Import section --------------------------------------------------- */
 import './styles.scss';
-import {todoFactory, projectFactory, userFactory, manageData, manageForm} from './todo.js';
+import {todoFactory, projectFactory, userFactory, manageData} from './todo.js';
+import {manageForm, managePrjForm} from './manageDOM.js'
 import {storageData} from './saveData.js';
-import {thePickOfDestiniy} from './test.js';
 /* ------------------------------------------------------------------ */
-thePickOfDestiniy();
+
 
 
 // variables we're gonna use for index.js
-const user          = userFactory(); /* The user */
+const user              = userFactory(); /* The user */
 let   currentProject;
-const todoHolder    = document.getElementById('todo-holder');  
-const projectTitle  = document.querySelector('.project-title');
-const btnNewTodo    = document.getElementById('btn-new-todo');
-const btnForm       = document.getElementById('btn-form-new-todo');
-const btnSort       = document.getElementById('btn-sort');
-//we create the object user, which holds the projects (and the projects the list of to dos)
+const projectSelect     = document.getElementById('project-selector');
+const todoHolder        = document.getElementById('todo-holder');  
+const projectTitle      = document.querySelector('.project-title');
+const btnNewTodo        = document.getElementById('btn-new-todo');
+const btnConfirmForm    = document.getElementById('btn-form-confirm');
+const btnEditForm       = document.getElementById('btn-form-edit');
+const btnCancelForm     = document.getElementById('btn-form-cancel');
+const btnSort           = document.getElementById('btn-sort');
 
 load();
-//fillForDefault();
 
-// functions to load() the index.html
+
+
 function load() {
     loadUser();
     loadListeners();
@@ -51,20 +53,75 @@ function loadUser() {
 
 function loadListeners() {
 
-    // Listeners
-    btnNewTodo.addEventListener('click', manageForm.visible); // we add invisible the first time on web load.
-    btnForm.addEventListener('click', newFormButton);
-    btnSort.addEventListener('click', () => { 
-        currentProject.sortToDos();  // We sort the list
-        manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board
+    projectSelect.addEventListener ('change', projectSelector);
+    btnNewTodo.addEventListener    ('click', addFormButton); 
+    btnConfirmForm.addEventListener('click', confirmFormButton);
+    btnEditForm.addEventListener   ('click', editFormButton   );
+    btnCancelForm.addEventListener ('click', cancelFormButton );
+
+    futureListeners('.btn-delete', 'click', (e) => { deleteToDoButton(e) }); // for the delete buttons in the ToDos
+    futureListeners('.btn-edit',   'click', (e) => { editToDoButton(e)   }); // for the edit buttons in the ToDos
+
+}
+
+function futureListeners(selector, event, handler) {
+    const rootElement = document.getElementById('todo-holder'); 
+    rootElement.addEventListener(event, (e) => {
+        let targetElement = e.target;
+        let iWantToBreakFree = false;
+        while(targetElement != null) {
+            if (targetElement.matches(selector)) {
+                handler(e);
+                return;
+            }
+            else {
+                targetElement = targetElement.parentElement;
+            }
+            
+            
+        }
     });
-    futureListeners('.btn-delete', 'click', (e) => { deleteButton(e);}); // for the delete buttons
-    futureListeners('.btn-edit', 'click', () => { console.log('pa k kieres saber eso jajaj saludos');}); // for the edit buttons
+};
+    
+function projectSelector() {
+    console.log('projectSelector');
+    const selectedValue = projectSelect.value;
+
+    console.log('selectedValue: ' + selectedValue);
+
+    if (!isNaN(parseInt(selectedValue))) {
+        //loadProject(parseInt(selectedValue));     not for now    for now 
+        console.log('yippi ka yei hijos de puta');
+    }
+    else {
+        switch(selectedValue) {
+            case 'select-text': // we do nothing
+            break;
+            case 'new-project': // we show form to start a new project
+               // startNewProject(); not for now
+               showProjectForm();
+            break;
+            default: // we do nothing as nothing shall we do
+            break;
+        }
+    }
+    
+}
+
+// function loadProject(index) {
+    
+//}
+function showProjectForm() {
+    managePrjForm.visible();
+
+}
+
+function addFormButton() {
+    manageForm.visible();
 }
 
 
-// Functions to make the main html work
-function newFormButton () {
+function confirmFormButton () {
 
    if (manageForm.validate()) {
         manageForm.visible();
@@ -76,8 +133,31 @@ function newFormButton () {
     
 };
 
-function deleteButton(event) {
-    console.log('<deleteButton>');
+
+ function editFormButton(event) {
+    console.log('<editFormButton>');
+    
+    if (manageForm.validate()) {
+        const index = btnEditForm.getAttribute('todo-id');
+        console.log('index  : ' +index);
+        currentProject.subtractToDo(index);
+        currentProject.addToDo(manageForm.getData());
+        currentProject.sortToDos();  // We sort the list
+        manageForm.visible();
+        storageData.saveUserData(user);
+        manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board
+    }
+    
+};
+
+ function cancelFormButton () {
+    manageForm.visible();    
+ };
+
+
+
+function deleteToDoButton(event) {
+    console.log('<deleteToDoButton>');
     const delBtn = event.target.id;
     const index = parseInt(delBtn.substr(11));
     console.log('delBtn:' +delBtn+'index: '+index);
@@ -86,29 +166,29 @@ function deleteButton(event) {
     currentProject.sortToDos();
     storageData.saveUserData(user);  // we save the user data since we added a new todo
     manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board        
-}
-
-function futureListeners(selector, event, handler) {
-    const rootElement = document.querySelector('body'); // cambiar por el board?
-    rootElement.addEventListener(event, (e) => {
-        let targetElement = e.target;
-        let iWantToBreakFree = false;
-        while(targetElement != null) {
-            if (targetElement.matches(selector)) {
-                handler(e);
-                targetElement = null; // we break the loop
-                console.log('AND I WILL BREAK THE LOOP FOREEEEEVER');
-            }
-            else {
-                console.log('THIS LOOP NEVER ENDS');
-                targetElement = targetElement.parentElement;
-            }
-            
-            
-        }
-    });
 };
-        
+
+function editToDoButton(event) {
+    console.log('<editToDoButton>');
+    
+    const editBtn = event.target.id;
+    const index   = parseInt(editBtn.substr(9));
+    const todo    = currentProject.getToDo(index);
+
+    console.log('editBtn: ' +editBtn);
+    console.log('index  : ' +index);
+    console.log('todo   : ' +todo );
+
+
+    manageForm.visible();       // always makes edit button invisible and confirm button visible
+    manageForm.setForm(todo);   // always makes edit button visible   and confirm button invisible
+
+};
+
+
+
+
+    
 
 
 // for test, we set user and project
@@ -165,7 +245,7 @@ x 3) Ordenar los toDos (Poner botón de ordenar/refrescar)
 			fecha menor > fecha mayor
 x 4) Hacer popup absoluto para insertar nuevos todos o, en un futuro, editarlos.
 x 5) Poner botón de borrado de ToDos.
-6) Poner botón de editado de ToDos.
+x 6) Poner botón de editado de ToDos.
 7) Permitir cambiar de proyecto.
 8) Permitir crear proyectos.
 9) Visibilizar la descripción de proyectos.
