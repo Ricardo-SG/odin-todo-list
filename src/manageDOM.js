@@ -1,16 +1,173 @@
+import {projectFactory, todoFactory} from './dataObjects.js';
+
+/* Now we gonna set a controller object */
+/* Its mission will be managing the user-project-todo data to create the HTML */
+export const manageData = (() => {
+
+    const setBoard = (title, project, node) => {
+ 
+        const ToDoList     = project.getToDos();
+
+        // 1) We set the title
+        title.innerText = project.getTitle();
+
+        // 2) We clean the whole div to refill it's from new.
+        cleanChilds(node); 
+
+        // 3) We refill it with every TODO object we've got in the object Project.
+        ToDoList.forEach(toDo => {
+            printTodo(toDo, node, project); 
+        });
+
+    };
+
+    const setSelector = (user, node) => {
+
+        const projectList     = user.getProjects();
+
+        // We clean the whole select to refill it's from new.
+        cleanChilds(node);
+
+        // We refill it with every project object we've got in the object Project.
+        projectList.forEach(prj => {
+            printPrj(prj, node); 
+        });
+
+        // We put the "new project" as the last option
+        const lastOption        = document.createElement('option');
+        const lastOptionText    = document.createTextNode('Create new Project');
+        lastOption.appendChild(lastOptionText);
+        lastOption.setAttribute('value', 'new-project');
+        node.appendChild(lastOption);
+
+    };
+
+    
+
+    const cleanChilds = (node) => {
+
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
+        }
+    };
+
+    const printPrj = (prj, node) => {
+
+        const newOption  = document.createElement('option');
+        const optionText = document.createTextNode(prj.getTitle());
+        newOption.appendChild(optionText);
+        newOption.setAttribute('value', prj.getId());
+        node.appendChild(newOption);
+
+    };
+
+
+    const printTodo = (toDo, node, project) => {
+
+        const todoCard     = document.createElement('div');
+        const visibleDiv   = document.createElement('div');
+        const clickDiv     = document.createElement('div');
+        const toggleDiv    = document.createElement('div');
+
+        const cardTitle    = document.createElement('div');
+        const cardDueDate  = document.createElement('div');
+        const cardDesc     = document.createElement('div');
+        const cardPriority = document.createElement('div');
+
+        const cardLabel    = document.createElement('label');
+        const cardCheck    = document.createElement('input');
+        const cardSlider   = document.createElement('span');
+
+        const btnEdit      = document.createElement('button');
+        const btnDelete    = document.createElement('button');
+
+    
+        /* The Checkbutton */
+        cardLabel.className = 'switch';
+        cardCheck.setAttribute('type','checkbox');
+        cardCheck.id            = 'card-'+toDo.getId();
+        cardCheck.className     = 'card-check';
+        cardSlider.className    = 'slider round';
+
+        /* The delete and edit button */
+        btnDelete.id            = 'btn-delete-'+toDo.getId();
+        btnEdit.id              = 'btn-edit-'+toDo.getId();
+        btnEdit.className       = 'btn-edit';
+        btnDelete.className     = 'btn-delete';
+        btnEdit.innerText       = 'Edit task';
+        btnDelete.innerText     = 'Delete task';
+
+
+        /* All classes (except check) and some id. */
+        todoCard.className      = 'todo-card';
+        visibleDiv.className    = 'main-todo';
+        clickDiv.className      = 'click-todo';
+        toggleDiv.className     = 'toggle-todo invisible';
+        cardTitle.className     = 'card-title';
+        cardDueDate.className   = 'card-due-date';
+        cardDesc.className      = 'card-description';
+        cardPriority.className  = 'priority'; 
+
+
+        cardTitle.innerText    = toDo.title;
+        cardDueDate.innerText  = toDo.dueDate;
+        cardDesc.innerText     = toDo.description;
+        cardPriority.innerText = toDo.priorityValue();
+
+
+        // if the checkbutton has to be checked */
+        if (toDo.getState() == 'done') {
+            cardCheck.checked   = true;
+            cardCheck.classList.toggle  ('checked');
+            cardTitle.classList.toggle  ('striked');
+            cardDueDate.classList.toggle('striked');
+            cardDesc.classList.toggle   ('striked');
+        }
+
+        
+        clickDiv.append(cardTitle, cardDueDate, cardPriority);
+        cardLabel.append(cardCheck,cardSlider);
+        visibleDiv.append(cardLabel, clickDiv, btnEdit, btnDelete);
+        toggleDiv.appendChild(cardDesc);
+        todoCard.append(visibleDiv, toggleDiv); 
+        node.appendChild(todoCard);    
+
+        /* This makes the ToDo show or hide the description on click */
+        clickDiv.addEventListener('click', () => {
+            toggleDiv.classList.toggle('invisible');
+        });
+        toggleDiv.addEventListener('click', () => {
+            toggleDiv.classList.toggle('invisible');
+        });
+
+        /* this changes the ToDo as done or not done */
+        cardCheck.addEventListener('click', () => {
+            toDo.toggleState();
+            cardCheck.classList.toggle  ('checked');
+            cardTitle.classList.toggle  ('striked');
+            cardDueDate.classList.toggle('striked');
+            cardDesc.classList.toggle   ('striked');
+        });
+
+    }
+    return {setBoard, setSelector};
+})();
+
 /* managePrjForm manages the form to create new projects */
 export const managePrjForm = ( ()=> {
 
-    // const divBlocker    = document.getElementById('background-blocker');
+    const divBlocker    = document.getElementById('background-blocker');
     const divform       = document.getElementById("project-div-form");  
     const form          = document.forms['project-form'];
-    // const title         = document.getElementById('prj-title'); 
+    const title         = document.getElementById('prj-title'); 
     // const desc          = document.getElementById('prj-desc');
     let isVisible       = false;
 
     const validate = () => {
         console.log('<validate>');
-        const title    = form.elements.title.value;
+
+
+        const title    = form.elements.prjtitle.value;
 
         if (title == undefined || title == null || title == '' ) {
             return false;
@@ -19,6 +176,17 @@ export const managePrjForm = ( ()=> {
             return true;
         }
     };
+
+    const getData = () => {
+        console.log('<getData>');
+
+        /* We recover each element from the form */
+        const dTitle    = form.elements.prjtitle.value;
+        const dDescr    = form.elements.prjdesc.value;
+        
+        return projectFactory(dTitle,dDescr);
+
+    }; 
 
     const cleanData = () => {
 
@@ -34,18 +202,18 @@ export const managePrjForm = ( ()=> {
         divform.classList.toggle('invisible');
         if (isVisible == true) {
             isVisible = false;
-            setBlocker(false);
+            setBlocker(divBlocker, false);
         }
         else {
             cleanData();
             isVisible = true;
-            setBlocker(true);
+            setBlocker(divBlocker, true);
             title.focus({focusVisible: true});
             
         }
     };
 
-    return {validate, visible}
+    return {validate, visible,getData}
 }
 
 
@@ -99,10 +267,7 @@ export const manageForm = (() => {
         form.reset();
         dueDate.setAttribute('value', getDateToday());
         setVisible(confirmBtn, true); 
-        setVisible(editBtn, false);
-        
-
-        
+        setVisible(editBtn, false);   
 
     }
 
@@ -119,12 +284,12 @@ export const manageForm = (() => {
         divform.classList.toggle('invisible');
         if (isVisible == true) {
             isVisible = false;
-            setBlocker(false);
+            setBlocker(divBlocker,false);
         }
         else {
             cleanData();
             isVisible = true;
-            setBlocker(true);
+            setBlocker(divBlocker,true);
             title.focus({focusVisible: true});
             
         }
@@ -165,12 +330,12 @@ function getDateToday() {
     return`${year}-${(month)}-${day}`;
 };
 
-function setBlocker(activate) {
+function setBlocker(divToBlock, activate) {
     if (activate) {
-        divBlocker.classList.add('blocker');
+        divToBlock.classList.add('blocker');
     }
     else {
-        divBlocker.classList.remove('blocker');
+        divToBlock.classList.remove('blocker');
     }
 
 };

@@ -1,7 +1,7 @@
 /* Import section --------------------------------------------------- */
 import './styles.scss';
-import {todoFactory, projectFactory, userFactory, manageData} from './todo.js';
-import {manageForm, managePrjForm} from './manageDOM.js'
+import {todoFactory, projectFactory, userFactory} from './dataObjects.js';
+import {manageForm, managePrjForm, manageData} from './manageDOM.js'
 import {storageData} from './saveData.js';
 /* ------------------------------------------------------------------ */
 
@@ -13,11 +13,14 @@ let   currentProject;
 const projectSelect     = document.getElementById('project-selector');
 const todoHolder        = document.getElementById('todo-holder');  
 const projectTitle      = document.querySelector('.project-title');
+const btnPrjConfirm     = document.getElementById('btn-prj-form-confirm');  
+const btnPrjEdit        = document.getElementById('btn-prj-form-edit');  
+const btnPrjCancel      = document.getElementById('btn-prj-form-cancel');  
 const btnNewTodo        = document.getElementById('btn-new-todo');
 const btnConfirmForm    = document.getElementById('btn-form-confirm');
 const btnEditForm       = document.getElementById('btn-form-edit');
 const btnCancelForm     = document.getElementById('btn-form-cancel');
-const btnSort           = document.getElementById('btn-sort');
+
 
 load();
 
@@ -33,6 +36,7 @@ function load() {
         // For now, the user can only have one project
         currentProject = user.getProject(0);
         manageData.setBoard(projectTitle, currentProject, todoHolder);
+        manageData.setSelector(user, projectSelect);
         
     } else {
         // We should load here a default version of the web. For now, we do nothing
@@ -45,6 +49,7 @@ function loadUser() {
     // We check if we can access local storage and if we can, we load data into user from the storage.
     if (storageData.storageAvailable('localStorage')) {
        user.setProjects(storageData.loadUserData());
+       user.setProjectsId();
     }
     else {
         return false;
@@ -53,8 +58,15 @@ function loadUser() {
 
 function loadListeners() {
 
-    projectSelect.addEventListener ('change', projectSelector);
-    btnNewTodo.addEventListener    ('click', addFormButton); 
+    /* Listeners related to manage projects */
+    projectSelect.addEventListener ('change', projectSelector );
+    btnPrjConfirm.addEventListener ('click' , confirmPrjButton);
+    btnPrjEdit.addEventListener    ('click' , editPrjButton   );
+    btnPrjCancel.addEventListener  ('click' , cancelPrjButton );
+
+
+    /* Listeners related to manage ToDo's inside a project */
+    btnNewTodo.addEventListener    ('click', addFormButton    ); 
     btnConfirmForm.addEventListener('click', confirmFormButton);
     btnEditForm.addEventListener   ('click', editFormButton   );
     btnCancelForm.addEventListener ('click', cancelFormButton );
@@ -82,6 +94,26 @@ function futureListeners(selector, event, handler) {
         }
     });
 };
+
+function confirmPrjButton() {
+    console.log('confirm project');
+    if (managePrjForm.validate()) {
+        showProjectForm();
+        user.addProject(managePrjForm.getData());
+        storageData.saveUserData(user);  // we save the user data since we added a new project
+        manageData.setSelector(user, projectSelect);
+    }
+    
+    
+};
+
+function editPrjButton() {
+    console.log('edit project');
+};
+
+function cancelPrjButton() {
+    showProjectForm();
+};
     
 function projectSelector() {
     console.log('projectSelector');
@@ -106,7 +138,7 @@ function projectSelector() {
         }
     }
     
-}
+};
 
 // function loadProject(index) {
     
@@ -114,11 +146,11 @@ function projectSelector() {
 function showProjectForm() {
     managePrjForm.visible();
 
-}
+};
 
 function addFormButton() {
     manageForm.visible();
-}
+};
 
 
 function confirmFormButton () {
