@@ -12,14 +12,25 @@ const user              = userFactory(); /* The user */
 let   currentProject;
 const projectSelect     = document.getElementById('project-selector');
 const todoHolder        = document.getElementById('todo-holder');  
+const dashboardDiv      = document.getElementById('dashboard-div');  
 const projectTitle      = document.querySelector('.project-title');
+
+/* The much many buttons we have */
+/* The three buttons that govern the new/edit project form */
 const btnPrjConfirm     = document.getElementById('btn-prj-form-confirm');  
 const btnPrjEdit        = document.getElementById('btn-prj-form-edit');  
 const btnPrjCancel      = document.getElementById('btn-prj-form-cancel');  
-const btnNewTodo        = document.getElementById('btn-new-todo');
+
+/* The three buttons that govern the new/edit to do form */
 const btnConfirmForm    = document.getElementById('btn-form-confirm');
 const btnEditForm       = document.getElementById('btn-form-edit');
 const btnCancelForm     = document.getElementById('btn-form-cancel');
+
+/* The new buttons to initiate a TODO in the todo-holder or a project in the dashboard */
+const btnNewPrj         = document.getElementById('btn-new-prj');
+const btnNewTodo        = document.getElementById('btn-new-todo');
+
+
 
 
 load();
@@ -31,17 +42,9 @@ function load() {
     loadListeners();
 
 
-    // If the user has at least one project, we set the web with it. If not, we set a default
-    if (user.getProjectNumber() > 0) {
-        // For now, the user can only have one project
-        currentProject = user.getProject(0);
-        manageData.setBoard(projectTitle, currentProject, todoHolder);
-        manageData.setSelector(user, projectSelect);
-        
-    } else {
-        // We should load here a default version of the web. For now, we do nothing
-        console.log('nothing to do here');
-    }
+    setDashboard();
+    setSelector();
+
 }
 
 function loadUser() {
@@ -98,10 +101,12 @@ function futureListeners(selector, event, handler) {
 function confirmPrjButton() {
     console.log('confirm project');
     if (managePrjForm.validate()) {
-        showProjectForm();
-        user.addProject(managePrjForm.getData());
+        managePrjForm.visible();
+
+        currentProject = user.addProject(managePrjForm.getData());
         storageData.saveUserData(user);  // we save the user data since we added a new project
-        manageData.setSelector(user, projectSelect);
+        setSelector(currentProject.getId());
+        setBoard();
     }
     
     
@@ -112,9 +117,10 @@ function editPrjButton() {
 };
 
 function cancelPrjButton() {
-    showProjectForm();
+    managePrjForm.visible();
 };
     
+
 function projectSelector() {
     console.log('projectSelector');
     const selectedValue = projectSelect.value;
@@ -122,16 +128,16 @@ function projectSelector() {
     console.log('selectedValue: ' + selectedValue);
 
     if (!isNaN(parseInt(selectedValue))) {
-        //loadProject(parseInt(selectedValue));     not for now    for now 
-        console.log('yippi ka yei hijos de puta');
+        currentProject = user.getProject(parseInt(selectedValue));     
+        setBoard();
     }
     else {
         switch(selectedValue) {
-            case 'select-text': // we do nothing
+            case 'Admin dashboard': 
+                setDashboard();
             break;
             case 'new-project': // we show form to start a new project
-               // startNewProject(); not for now
-               showProjectForm();
+               managePrjForm.visible();
             break;
             default: // we do nothing as nothing shall we do
             break;
@@ -140,18 +146,25 @@ function projectSelector() {
     
 };
 
-// function loadProject(index) {
-    
-//}
-function showProjectForm() {
-    managePrjForm.visible();
+function setSelector(index) {
 
-};
+    manageData.setSelector(user, projectSelect, index);
+}
+
+function setBoard() {
+    cleanBoardContent('dashboard');
+    manageData.setBoard(projectTitle, currentProject, todoHolder);
+}
+
+function setDashboard() {
+    cleanBoardContent('todo-holder');
+    manageData.setDashboard(projectTitle, user, dashboardDiv);
+}
+
 
 function addFormButton() {
     manageForm.visible();
 };
-
 
 function confirmFormButton () {
 
@@ -160,11 +173,10 @@ function confirmFormButton () {
         currentProject.addToDo(manageForm.getData());
         currentProject.sortToDos();  // We sort the list
         storageData.saveUserData(user);  // we save the user data since we added a new todo
-        manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board       
+        setBoard();      
    }  
     
 };
-
 
  function editFormButton(event) {
     console.log('<editFormButton>');
@@ -177,7 +189,7 @@ function confirmFormButton () {
         currentProject.sortToDos();  // We sort the list
         manageForm.visible();
         storageData.saveUserData(user);
-        manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board
+        setBoard();
     }
     
 };
@@ -185,8 +197,6 @@ function confirmFormButton () {
  function cancelFormButton () {
     manageForm.visible();    
  };
-
-
 
 function deleteToDoButton(event) {
     console.log('<deleteToDoButton>');
@@ -197,7 +207,7 @@ function deleteToDoButton(event) {
     currentProject.subtractToDo(index);
     currentProject.sortToDos();
     storageData.saveUserData(user);  // we save the user data since we added a new todo
-    manageData.setBoard(projectTitle, currentProject, todoHolder); // we rebuild the board        
+    setBoard();      
 };
 
 function editToDoButton(event) {
@@ -217,7 +227,28 @@ function editToDoButton(event) {
 
 };
 
-
+function cleanBoardContent(type) {
+    console.log('<cleanBoardContent> ' +type);
+    // We are lazy comfy programmers and this is the fastest to obscure the part of the web we don't want to be seen
+    switch(type) {
+        case 'dashboard':
+            manageData.cleanChilds(dashboardDiv);
+            manageData.setVisible(dashboardDiv, false);
+            manageData.setVisible(btnNewPrj,    false);
+            manageData.setVisible(todoHolder,   true);
+            manageData.setVisible(btnNewTodo,   true);
+        break;
+        break;
+        case 'todo-holder':
+            manageData.cleanChilds(todoHolder);
+            manageData.setVisible(dashboardDiv, true);
+            manageData.setVisible(btnNewPrj,    true);
+            manageData.setVisible(todoHolder,   false);
+            manageData.setVisible(btnNewTodo,   false);
+        default:
+        break;
+    }
+}
 
 
     
@@ -278,9 +309,13 @@ x 3) Ordenar los toDos (Poner botón de ordenar/refrescar)
 x 4) Hacer popup absoluto para insertar nuevos todos o, en un futuro, editarlos.
 x 5) Poner botón de borrado de ToDos.
 x 6) Poner botón de editado de ToDos.
-7) Permitir cambiar de proyecto.
-8) Permitir crear proyectos.
-9) Visibilizar la descripción de proyectos.
-x 10) añadir librería para guardar datos en local. Ser capaz de guardar y leer en local.
-11) ¿Rehacer la interfaz?
+x 7) Permitir cambiar de proyecto.
+x 8) Permitir crear proyectos.
+x 9) añadir librería para guardar datos en local. Ser capaz de guardar y leer en local.
+10) Crear Admin Dashboard
+11) Permitir borrar proyectos
+12) Permitir editar proyectos
+13) Visibilizar la descripción de proyectos.
+14) ¿Rehacer la interfaz?
 */
+

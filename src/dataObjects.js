@@ -1,4 +1,5 @@
-import { parse, format, isAfter } from 'date-fns';
+import { parse, isAfter } from 'date-fns';
+
 
 /* this is an exercise, we gonna be simples, each todo will have:
 1) The title ("Remember to take a shower today")
@@ -186,6 +187,7 @@ export const userFactory = () => {
         const addProject = (project) => {
             project.setId(projects.length);
             projects.push(project);
+            return project;
             
         }
         const getProjectNumber = () => {

@@ -68,6 +68,41 @@ $grey: rgba(138, 126, 143, 0.6);
     min-width:600px;
 
 
+  #dashboard-div {
+    padding: 15px;
+    font-size: 32px;
+    font-family: Helvetica;
+    font-weight: bold;
+    color: white;
+
+
+    .prj-card {
+      background-color: #FFFFFF;
+      color: black;
+      font-weight: normal;
+      font-size: 18px;
+      padding:5px;
+    
+    }
+    .prj-card-title {
+      text-align: center;
+    }
+  
+    .prj-card-desc {
+      padding:6px;
+    }
+    .prj-card p {
+      padding:5px;
+    }
+
+    .prj-todos-list {
+      margin-left:10%;
+
+      }
+    }
+  
+
+ 
 
     .todo-card {
 
@@ -348,12 +383,20 @@ $grey: rgba(138, 126, 143, 0.6);
   }
 
 
-
+.grid-div {
+  // since we need invisible to be stronger...we gotta put the grid css here...
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap:15px;
+  background-color: #bccbde;
+}
 
 /* Clases generales */
 .invisible {
   display:none;
 }
+
+
 
 .striked {
   text-decoration: line-through;

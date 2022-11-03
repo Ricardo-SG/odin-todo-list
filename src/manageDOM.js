@@ -1,17 +1,17 @@
-import {projectFactory, todoFactory} from './dataObjects.js';
-
+import {projectFactory, todoFactory, userFactory} from './dataObjects.js';
+import {parse, format} from 'date-fns';
 /* Now we gonna set a controller object */
 /* Its mission will be managing the user-project-todo data to create the HTML */
 export const manageData = (() => {
 
     const setBoard = (title, project, node) => {
- 
+        console.log('<setBoard> ' +title +'-'+project+'-'+node)
         const ToDoList     = project.getToDos();
 
         // 1) We set the title
         title.innerText = project.getTitle();
 
-        // 2) We clean the whole div to refill it's from new.
+        // 2) We clean the whole div to refill it from new.
         cleanChilds(node); 
 
         // 3) We refill it with every TODO object we've got in the object Project.
@@ -21,12 +21,20 @@ export const manageData = (() => {
 
     };
 
-    const setSelector = (user, node) => {
-
-        const projectList     = user.getProjects();
+    const setSelector = (user, node, index) => {
+        console.log('<setSelector>');
+        const projectList       = user.getProjects();
+        const firstOption       = document.createElement('option');
+        const firstOptionText   = document.createTextNode('Admin dashboard');
+        const lastOption        = document.createElement('option');
+        const lastOptionText    = document.createTextNode('Create new Project');
 
         // We clean the whole select to refill it's from new.
         cleanChilds(node);
+
+        firstOption.appendChild(firstOptionText);
+        firstOption.setAttribute('value', 'Admin dashboard');
+        node.appendChild(firstOption);
 
         // We refill it with every project object we've got in the object Project.
         projectList.forEach(prj => {
@@ -34,14 +42,121 @@ export const manageData = (() => {
         });
 
         // We put the "new project" as the last option
-        const lastOption        = document.createElement('option');
-        const lastOptionText    = document.createTextNode('Create new Project');
+
         lastOption.appendChild(lastOptionText);
         lastOption.setAttribute('value', 'new-project');
         node.appendChild(lastOption);
 
+        if (index != null && index != undefined && !isNaN(parseInt(index))) {
+            console.log('index: ' + index);
+            node.value = index;
+        } else {
+            index = null;
+        }
+        
+
     };
 
+    const setDashboard = (title, user, node) => {
+
+        title.innerText = 'Admin dashboard';
+
+        cleanChilds(node); // we empty the dashboard holder
+
+        if (user.getProjectNumber() > 0) {
+            const projectList = user.getProjects();
+            projectList.forEach(prj => {
+                printCard(prj, node); // we create the html with the cards for each project
+            });
+        };
+    }
+
+    const setVisible = (node, mode) => {
+        console.log('<setVisible>');
+        const nodeClass = node.className;
+        console.log('nodeClass: ' + typeof nodeClass);
+
+        console.log('nodeClass.includes(\'invisible\'): ' +nodeClass.includes('invisible'))
+        switch(mode) {
+        case true:
+            if ((node.className).includes('invisible')) {
+                node.classList.remove('invisible');
+            }
+        break;
+        case false:
+            if (!(node.className).includes('invisible')) {
+                node.classList.add('invisible');
+            }
+        break;
+        default:    
+            node.classList.toggle('invisible');
+        break;
+        }
+        
+    }
+
+    const printCard = (prj, node) => {
+
+        const prjCard      = document.createElement('div');
+        const prjCardTitle = document.createElement('H1');
+        const prjCardDesc  = document.createElement('p');
+        const prjCardTodos = document.createElement('ul');
+        const prjCardBtns  = document.createElement('div');
+        const btnEdit      = document.createElement('button');
+        const btnDelete    = document.createElement('button');
+
+        prjCard.className       = 'prj-card';
+        prjCardTitle.className  = 'prj-card-title';
+        prjCardDesc.className   = 'prj-card-desc';
+        prjCardTodos.className  = 'prj-todos-list';
+        prjCardBtns.className   = 'prj-button-holder';
+        btnEdit.className       = 'prj-btn-edit';
+        btnDelete.className     = 'prj-btn-delete';
+
+        prjCardTitle.innerText = prj.title;
+        prjCardDesc.innerText  = prj.description;
+        btnEdit.innerText      = 'Edit this project';
+        btnDelete.innerText    = 'delete this project';
+
+        // we gonna fetch the first three todos
+        const todo1 = prj.getToDo(0);
+        const todo2 = prj.getToDo(1);
+        const todo3 = prj.getToDo(2);
+
+        if (todo1 != undefined && todo1 != null) {
+            printTodoSimple(todo1, prjCardTodos);
+        }
+
+        if (todo2 != undefined && todo2 != null) {
+            printTodoSimple(todo2, prjCardTodos);
+        }
+
+        if (todo3 != undefined && todo3 != null) {
+            printTodoSimple(todo3, prjCardTodos);
+        }
+
+        prjCardBtns.append(btnEdit, btnDelete);
+
+        prjCard.append(prjCardTitle, prjCardDesc, prjCardTodos, prjCardBtns);
+        node.appendChild(prjCard);
+
+    };
+
+
+    const printTodoSimple = (todo, node) => {
+
+        const todoElement = document.createElement('li');
+        todoElement.className = 'prj-todo-element';
+        todoElement.innerText    = todo.title;
+ 
+
+        if (todo.getState() == 'done') {
+            todoElement.classList.toggle  ('striked');
+        }
+        
+        node.appendChild(todoElement);
+
+    };
     
 
     const cleanChilds = (node) => {
@@ -62,7 +177,7 @@ export const manageData = (() => {
     };
 
 
-    const printTodo = (toDo, node, project) => {
+    const printTodo = (toDo, node) => {
 
         const todoCard     = document.createElement('div');
         const visibleDiv   = document.createElement('div');
@@ -150,7 +265,7 @@ export const manageData = (() => {
         });
 
     }
-    return {setBoard, setSelector};
+    return {setBoard, setSelector, setDashboard, cleanChilds, setVisible};
 })();
 
 /* managePrjForm manages the form to create new projects */
