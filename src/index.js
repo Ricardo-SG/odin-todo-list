@@ -16,6 +16,8 @@ const dashboardDiv      = document.getElementById('dashboard-div');
 const projectTitle      = document.querySelector('.project-title');
 
 /* The much many buttons we have */
+/* The buttons of the admin dashboard */
+
 /* The three buttons that govern the new/edit project form */
 const btnPrjConfirm     = document.getElementById('btn-prj-form-confirm');  
 const btnPrjEdit        = document.getElementById('btn-prj-form-edit');  
@@ -29,8 +31,6 @@ const btnCancelForm     = document.getElementById('btn-form-cancel');
 /* The new buttons to initiate a TODO in the todo-holder or a project in the dashboard */
 const btnNewPrj         = document.getElementById('btn-new-prj');
 const btnNewTodo        = document.getElementById('btn-new-todo');
-
-
 
 
 load();
@@ -62,10 +62,14 @@ function loadUser() {
 function loadListeners() {
 
     /* Listeners related to manage projects */
-    projectSelect.addEventListener ('change', projectSelector );
-    btnPrjConfirm.addEventListener ('click' , confirmPrjButton);
-    btnPrjEdit.addEventListener    ('click' , editPrjButton   );
-    btnPrjCancel.addEventListener  ('click' , cancelPrjButton );
+    projectSelect.addEventListener ('change', projectSelector      );
+    btnNewPrj.addEventListener     ('click',  btnNewProject        );
+    btnPrjConfirm.addEventListener ('click' , confirmPrjFormButton );
+    btnPrjEdit.addEventListener    ('click' , editPrjFormButton    );
+    btnPrjCancel.addEventListener  ('click' , cancelPrjFormButton  );
+
+    futureListeners('dashboard-div', '.prj-btn-delete', 'click', (e) => { deletePrjButton(e) }); // for the delete buttons in the ToDos
+    futureListeners('dashboard-div', '.prj-btn-edit',   'click', (e) => { editPrjButton(e)   }); // for the edit buttons in the ToDos
 
 
     /* Listeners related to manage ToDo's inside a project */
@@ -73,14 +77,15 @@ function loadListeners() {
     btnConfirmForm.addEventListener('click', confirmFormButton);
     btnEditForm.addEventListener   ('click', editFormButton   );
     btnCancelForm.addEventListener ('click', cancelFormButton );
-
-    futureListeners('.btn-delete', 'click', (e) => { deleteToDoButton(e) }); // for the delete buttons in the ToDos
-    futureListeners('.btn-edit',   'click', (e) => { editToDoButton(e)   }); // for the edit buttons in the ToDos
+    
+    futureListeners('todo-holder', '.card-check', 'click', (e) => { checkToDo(e)   }); // for the edit buttons in the ToDos
+    futureListeners('todo-holder', '.btn-delete', 'click', (e) => { deleteToDoButton(e) }); // for the delete buttons in the ToDos
+    futureListeners('todo-holder', '.btn-edit',   'click', (e) => { editToDoButton(e)   }); // for the edit buttons in the ToDos
 
 }
 
-function futureListeners(selector, event, handler) {
-    const rootElement = document.getElementById('todo-holder'); 
+function futureListeners(idnode, selector, event, handler) {
+    const rootElement = document.getElementById(idnode); 
     rootElement.addEventListener(event, (e) => {
         let targetElement = e.target;
         let iWantToBreakFree = false;
@@ -98,8 +103,29 @@ function futureListeners(selector, event, handler) {
     });
 };
 
-function confirmPrjButton() {
-    console.log('confirm project');
+function checkToDo(event) {
+    const checkBtn = event.target.id;
+    const index = parseInt(checkBtn.substr(5));
+    
+    // We recover the todo whose checkbutton triggered the event
+    const toDo = currentProject.getToDo(index);
+
+    // We instruct to toggle it's done/undone state in the object
+    toDo.toggleState();
+
+    // We sort the whole ToDo arrays of the project
+    currentProject.sortToDos();
+
+    // we save the user data since we changed the data
+    storageData.saveUserData(user); 
+
+    // We reset the board
+    setBoard();
+
+}
+
+function confirmPrjFormButton() {
+
     if (managePrjForm.validate()) {
         managePrjForm.visible();
 
@@ -112,20 +138,29 @@ function confirmPrjButton() {
     
 };
 
-function editPrjButton() {
-    console.log('edit project');
+function editPrjFormButton() {
+
+
+    if (managePrjForm.validate()) {
+        const index = btnPrjEdit.getAttribute('prj-id');
+
+        user.removeProject(index);
+        user.addProject(managePrjForm.getData(), index);
+        managePrjForm.visible();
+        storageData.saveUserData(user);
+        setSelector();
+        setDashboard();
+    }
 };
 
-function cancelPrjButton() {
+function cancelPrjFormButton() {
     managePrjForm.visible();
 };
     
 
 function projectSelector() {
-    console.log('projectSelector');
-    const selectedValue = projectSelect.value;
 
-    console.log('selectedValue: ' + selectedValue);
+    const selectedValue = projectSelect.value;
 
     if (!isNaN(parseInt(selectedValue))) {
         currentProject = user.getProject(parseInt(selectedValue));     
@@ -137,7 +172,7 @@ function projectSelector() {
                 setDashboard();
             break;
             case 'new-project': // we show form to start a new project
-               managePrjForm.visible();
+                btnNewProject()
             break;
             default: // we do nothing as nothing shall we do
             break;
@@ -145,6 +180,12 @@ function projectSelector() {
     }
     
 };
+function btnNewProject() {
+
+    manageData.setVisible(btnPrjConfirm, true); 
+    manageData.setVisible(btnPrjEdit, false);
+    managePrjForm.visible();
+}
 
 function setSelector(index) {
 
@@ -179,12 +220,12 @@ function confirmFormButton () {
 };
 
  function editFormButton(event) {
-    console.log('<editFormButton>');
+
     
     if (manageForm.validate()) {
         const index = btnEditForm.getAttribute('todo-id');
-        console.log('index  : ' +index);
-        currentProject.subtractToDo(index);
+
+        currentProject.removeToDo(index);
         currentProject.addToDo(manageForm.getData());
         currentProject.sortToDos();  // We sort the list
         manageForm.visible();
@@ -199,12 +240,11 @@ function confirmFormButton () {
  };
 
 function deleteToDoButton(event) {
-    console.log('<deleteToDoButton>');
+
     const delBtn = event.target.id;
     const index = parseInt(delBtn.substr(11));
-    console.log('delBtn:' +delBtn+'index: '+index);
     
-    currentProject.subtractToDo(index);
+    currentProject.removeToDo(index);
     currentProject.sortToDos();
     storageData.saveUserData(user);  // we save the user data since we added a new todo
     setBoard();      
@@ -227,8 +267,32 @@ function editToDoButton(event) {
 
 };
 
+function deletePrjButton(event) {
+    console.log('<deletePrjButton>');
+    const delBtn = event.target.id;
+    const index = parseInt(delBtn.substr(15));
+    console.log('index: ' +index);
+    user.removeProject(index);
+    storageData.saveUserData(user);  // we save the user data since we made a change
+    setSelector();
+    setDashboard();
+
+
+};
+
+function editPrjButton(event) {
+    console.log('<editPrjButton>');
+    
+    const editBtn = event.target.id;
+    const index   = parseInt(editBtn.substr(13));
+    const prj     = user.getProject(index);
+    managePrjForm.visible();
+    managePrjForm.setForm(prj);
+
+};
+
 function cleanBoardContent(type) {
-    console.log('<cleanBoardContent> ' +type);
+    
     // We are lazy comfy programmers and this is the fastest to obscure the part of the web we don't want to be seen
     switch(type) {
         case 'dashboard':
@@ -312,10 +376,11 @@ x 6) Poner botón de editado de ToDos.
 x 7) Permitir cambiar de proyecto.
 x 8) Permitir crear proyectos.
 x 9) añadir librería para guardar datos en local. Ser capaz de guardar y leer en local.
-10) Crear Admin Dashboard
-11) Permitir borrar proyectos
-12) Permitir editar proyectos
-13) Visibilizar la descripción de proyectos.
+x10) Crear Admin Dashboard
+x11) Permitir borrar proyectos
+x12) Permitir editar proyectos
+x13) Visibilizar la descripción de proyectos.
 14) ¿Rehacer la interfaz?
 */
+
 

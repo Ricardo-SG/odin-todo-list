@@ -1,15 +1,19 @@
 import {projectFactory, todoFactory, userFactory} from './dataObjects.js';
 import {parse, format} from 'date-fns';
+import {storageData} from './saveData.js';
 /* Now we gonna set a controller object */
 /* Its mission will be managing the user-project-todo data to create the HTML */
 export const manageData = (() => {
 
     const setBoard = (title, project, node) => {
-        console.log('<setBoard> ' +title +'-'+project+'-'+node)
+
         const ToDoList     = project.getToDos();
 
         // 1) We set the title
-        title.innerText = project.getTitle();
+        if (title != undefined && title != null) {
+            title.innerText = project.getTitle();
+        }
+        
 
         // 2) We clean the whole div to refill it from new.
         cleanChilds(node); 
@@ -22,7 +26,7 @@ export const manageData = (() => {
     };
 
     const setSelector = (user, node, index) => {
-        console.log('<setSelector>');
+
         const projectList       = user.getProjects();
         const firstOption       = document.createElement('option');
         const firstOptionText   = document.createTextNode('Admin dashboard');
@@ -48,7 +52,6 @@ export const manageData = (() => {
         node.appendChild(lastOption);
 
         if (index != null && index != undefined && !isNaN(parseInt(index))) {
-            console.log('index: ' + index);
             node.value = index;
         } else {
             index = null;
@@ -72,11 +75,9 @@ export const manageData = (() => {
     }
 
     const setVisible = (node, mode) => {
-        console.log('<setVisible>');
-        const nodeClass = node.className;
-        console.log('nodeClass: ' + typeof nodeClass);
 
-        console.log('nodeClass.includes(\'invisible\'): ' +nodeClass.includes('invisible'))
+        const nodeClass = node.className;
+
         switch(mode) {
         case true:
             if ((node.className).includes('invisible')) {
@@ -105,18 +106,25 @@ export const manageData = (() => {
         const btnEdit      = document.createElement('button');
         const btnDelete    = document.createElement('button');
 
+        /* The edit and delete button */
+        btnEdit.id              = 'prj-btn-edit-'+prj.getId();
+        btnEdit.className       = 'prj-btn-edit';
+        btnEdit.innerText       = 'Edit this project';
+        btnDelete.id            = 'prj-btn-delete-'+prj.getId();
+        btnDelete.className     = 'prj-btn-delete';
+        btnDelete.innerText     = 'delete this project';
+
+        /* The className of the rest of the elements */
         prjCard.className       = 'prj-card';
         prjCardTitle.className  = 'prj-card-title';
         prjCardDesc.className   = 'prj-card-desc';
         prjCardTodos.className  = 'prj-todos-list';
         prjCardBtns.className   = 'prj-button-holder';
-        btnEdit.className       = 'prj-btn-edit';
-        btnDelete.className     = 'prj-btn-delete';
-
+        
+        /* The innertext */
         prjCardTitle.innerText = prj.title;
         prjCardDesc.innerText  = prj.description;
-        btnEdit.innerText      = 'Edit this project';
-        btnDelete.innerText    = 'delete this project';
+
 
         // we gonna fetch the first three todos
         const todo1 = prj.getToDo(0);
@@ -177,7 +185,7 @@ export const manageData = (() => {
     };
 
 
-    const printTodo = (toDo, node) => {
+    const printTodo = (toDo, node, prj) => {
 
         const todoCard     = document.createElement('div');
         const visibleDiv   = document.createElement('div');
@@ -205,11 +213,11 @@ export const manageData = (() => {
         cardSlider.className    = 'slider round';
 
         /* The delete and edit button */
-        btnDelete.id            = 'btn-delete-'+toDo.getId();
         btnEdit.id              = 'btn-edit-'+toDo.getId();
         btnEdit.className       = 'btn-edit';
-        btnDelete.className     = 'btn-delete';
         btnEdit.innerText       = 'Edit task';
+        btnDelete.id            = 'btn-delete-'+toDo.getId();
+        btnDelete.className     = 'btn-delete';
         btnDelete.innerText     = 'Delete task';
 
 
@@ -255,14 +263,17 @@ export const manageData = (() => {
             toggleDiv.classList.toggle('invisible');
         });
 
-        /* this changes the ToDo as done or not done */
+        /* this changes the ToDo as done or not done 
         cardCheck.addEventListener('click', () => {
             toDo.toggleState();
             cardCheck.classList.toggle  ('checked');
             cardTitle.classList.toggle  ('striked');
             cardDueDate.classList.toggle('striked');
             cardDesc.classList.toggle   ('striked');
-        });
+            prj.sortToDos();
+            storageData.saveUserData(user);  // we save the user data since we added a new todo
+            setBoard(undefined, prj, node); 
+        });*/
 
     }
     return {setBoard, setSelector, setDashboard, cleanChilds, setVisible};
@@ -275,12 +286,12 @@ export const managePrjForm = ( ()=> {
     const divform       = document.getElementById("project-div-form");  
     const form          = document.forms['project-form'];
     const title         = document.getElementById('prj-title'); 
-    // const desc          = document.getElementById('prj-desc');
+    const desc          = document.getElementById('prj-desc');
+    const confirmBtn    = document.getElementById('btn-prj-form-confirm');
+    const editBtn       = document.getElementById('btn-prj-form-edit');
     let isVisible       = false;
 
     const validate = () => {
-        console.log('<validate>');
-
 
         const title    = form.elements.prjtitle.value;
 
@@ -293,7 +304,6 @@ export const managePrjForm = ( ()=> {
     };
 
     const getData = () => {
-        console.log('<getData>');
 
         /* We recover each element from the form */
         const dTitle    = form.elements.prjtitle.value;
@@ -313,7 +323,7 @@ export const managePrjForm = ( ()=> {
     };
 
     const visible = () => {
-        console.log('<visible>');
+
         divform.classList.toggle('invisible');
         if (isVisible == true) {
             isVisible = false;
@@ -328,7 +338,20 @@ export const managePrjForm = ( ()=> {
         }
     };
 
-    return {validate, visible,getData}
+    const setForm = (prj) => {
+
+        title.value = prj.title;
+        desc.value  = prj.description;
+
+        editBtn.setAttribute('prj-id', prj.getId());
+
+        setVisible(confirmBtn, false); 
+        setVisible(editBtn, true);
+        
+    
+    };
+
+    return {validate, visible,getData, setForm}
 }
 
 
@@ -351,7 +374,6 @@ export const manageForm = (() => {
     let   isVisible     = false;
 
     const validate = () => {
-        console.log('<validate>');
         const title    = form.elements.title.value;
 
         if (title == undefined || title == null || title == '' ) {
@@ -363,7 +385,6 @@ export const manageForm = (() => {
     }
 
     const getData = () => {
-        console.log('<getData>');
 
         /* We recover each element from the form */
         //const form     = document.forms['todo-form'];
@@ -371,7 +392,7 @@ export const manageForm = (() => {
         const dDescr    = form.elements.desc.value;
         const dDueDate  = transformDate(form.elements.date.value, 'yyyy-MM-dd', 'dd-MM-yyyy');
         const dPriority = form.elements.priority.value;
-        const dToDo     = todoFactory(dTitle,dDescr,dDueDate,dPriority);
+        const dToDo     = todoFactory(dTitle,dDescr,dDueDate,dPriority, undefined, 'undone');
         
         return dToDo;
 
@@ -395,7 +416,7 @@ export const manageForm = (() => {
 
 
     const visible = () => {
-        console.log('<visible>');
+
         divform.classList.toggle('invisible');
         if (isVisible == true) {
             isVisible = false;
@@ -412,11 +433,6 @@ export const manageForm = (() => {
 
     const setForm = (todo) => {
 
-        console.log('<setForm> ' +todo);
-        console.log('todo.title    : ' + todo.title         );
-        console.log('todo.priority : ' + todo.priority      );
-        console.log('todo.desc     : ' + todo.description   );
-        console.log('todo.dueDate  : ' + todo.dueDate       );
         title.value    = todo.title;
         priority.value = todo.priority;
         desc.value     = todo.description;
@@ -457,15 +473,9 @@ function setBlocker(divToBlock, activate) {
 
 
 const setVisible = (htmlObject, state) => {
-    console.log('<setVisible>')
-    
-    console.log('htmlObject.id: ' + htmlObject.id);
+
     const currentClasses = htmlObject.className;
     const currentState   = !currentClasses.includes('invisible');
-
-    console.log('currentClasses: ' + currentClasses);
-    console.log('currentState  : ' + currentState);
-    console.log('state         : ' + state);
 
     if (state != currentState) {
         state?

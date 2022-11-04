@@ -9,9 +9,9 @@ import { parse, isAfter } from 'date-fns';
 */
 
 /* Its mission is to hold the data relative to the todos */
-export const todoFactory = (title, description, dueDate, priority) => {
-    let idNumber;
-    let state = 'undone';
+export const todoFactory = (title, description, dueDate, priority, idNumber, state) => {
+    //let idNumber;
+    //let state;
     
     const getId = () => {
         return idNumber;
@@ -48,7 +48,7 @@ export const todoFactory = (title, description, dueDate, priority) => {
 
     }
 
-    return {idNumber, title, description, dueDate, priority, 
+    return {title, description, dueDate, priority, get state() {return state},
             setId, getId, getState, toggleState, priorityValue};
 };
 
@@ -72,7 +72,7 @@ export const projectFactory = (title, description) => {
         toDos.push(todo);
     };
 
-    const subtractToDo = (index) => {
+    const removeToDo = (index) => {
         
         toDos.splice(index, 1);
 
@@ -80,8 +80,6 @@ export const projectFactory = (title, description) => {
             toDos[i].setId(i); /* We adjust the ID of the todos */
         }
 
-        console.log('after --- ');
-        console.table(toDos);
     };
 
     const getToDos = () => {
@@ -133,7 +131,9 @@ export const projectFactory = (title, description) => {
     };
 
     const compareState = (a,b) => {
-
+        console.log('<compareState>');
+        console.log('a.getState(): ' + a.getState());
+        console.log('b.getState(): ' + b.getState());
 
         if (a.getState() == 'undone' && b.getState() == 'done') {
             return -1; 
@@ -174,7 +174,7 @@ export const projectFactory = (title, description) => {
 
 
     return {title,    description,  toDos,    getId,   setId, 
-            addToDo,  subtractToDo, getToDos, getToDo, setToDos,
+            addToDo,  removeToDo, getToDos, getToDo, setToDos,
             getTitle, sortToDos};
     
 };
@@ -184,19 +184,30 @@ export const projectFactory = (title, description) => {
 export const userFactory = () => {
     const projects = [];
 
-        const addProject = (project) => {
-            project.setId(projects.length);
-            projects.push(project);
+        const addProject = (project, index) => {
+
+            if (!isNaN(parseInt(index))) // si el parámetro index llega y es numérico
+            {
+                project.setId(index);
+                projects.splice(index,0,project);
+
+            } else {
+                project.setId(projects.length);
+                projects.push(project);
+            }
+
             return project;
+
             
-        }
+        };
+
         const getProjectNumber = () => {
             return projects.length;
-        }
+        };
 
         const getProjects = () => {
             return projects;
-        }
+        };
 
         const setProjects = (projectList) => {
       
@@ -206,8 +217,8 @@ export const userFactory = () => {
             projectList.forEach(prj => {
                 let newPrj = projectFactory(prj.title, prj.description);
                 prj.toDos.forEach(todo => {
-                    // console.table(todo);
-                    let newToDo = todoFactory(todo.title, todo.description, todo.dueDate, todo.priority);
+
+                    let newToDo = todoFactory(todo.title, todo.description, todo.dueDate, todo.priority, todo.idNumber, todo.state);
                     newPrj.addToDo(newToDo);
                 })
 
@@ -216,11 +227,11 @@ export const userFactory = () => {
 
             })
             
-        }
+        };
 
         const getProject = (index) => {
             return projects[index];
-        }
+        };
 
         const setProjectsId = () => {
             // for now to work well we're gonna manually assign the id's
@@ -228,11 +239,21 @@ export const userFactory = () => {
                 projects[i].setId(i);
             };
 
-        }
+        };
+
+        const removeProject = (index) => {
+
+            projects.splice(index, 1);
+
+            for (let i=index;i<projects.length;i++) {
+                projects[i].setId(i); /* We adjust the ID of the todos */
+            }
+
+        };
 
 
 
-     return {addProject, getProjectNumber, getProjects, setProjects, getProject, setProjectsId};
+     return {addProject, getProjectNumber, getProjects, setProjects, getProject, setProjectsId, removeProject};
 };
 
 

@@ -26,16 +26,20 @@ export const storageData = (() => {
     };
 
     const saveUserData = (obj) => {
+        console.log('<saveUserData>');
         // console.log('<saveUserData> ' + JSON.stringify(obj.getProjects()));
         // console.log('obj.getProjectNumber: ' + obj.getProjectNumber());
         // console.table(JSON.stringify(obj.getProjects()));
         localStorage.removeItem('userProjects'); 
+        console.log('JSON.stringify(obj.getProjects()): ' +JSON.stringify(obj.getProjects()));
         localStorage.setItem('userProjects', JSON.stringify(obj.getProjects()));
-
+        
         
     }
 
     const loadUserData = () => {
+        console.log('<loadUserData>');
+        console.log(localStorage.getItem('userProjects'));
         return JSON.parse(localStorage.getItem('userProjects'));
     }
 
