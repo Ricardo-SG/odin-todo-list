@@ -1,6 +1,8 @@
-import {projectFactory, todoFactory, userFactory} from './dataObjects.js';
+import {projectFactory, todoFactory} from './dataObjects.js';
 import {parse, format} from 'date-fns';
-import {storageData} from './saveData.js';
+import editImage from './images/editButton.png'; 
+import deleteImage from './images/deleteButton.png'; 
+
 /* Now we gonna set a controller object */
 /* Its mission will be managing the user-project-todo data to create the HTML */
 export const manageData = (() => {
@@ -61,7 +63,7 @@ export const manageData = (() => {
     };
 
     const setDashboard = (title, user, node) => {
-
+        
         title.innerText = 'Admin dashboard';
 
         cleanChilds(node); // we empty the dashboard holder
@@ -102,24 +104,33 @@ export const manageData = (() => {
         const prjCardTitle = document.createElement('H1');
         const prjCardDesc  = document.createElement('p');
         const prjCardHr    = document.createElement('hr');
+        const prjCardDiv   = document.createElement('div');
         const prjCardTodos = document.createElement('ul');
         const prjCardBtns  = document.createElement('div');
         const btnEdit      = document.createElement('button');
+        const imageEdit    = document.createElement('img');
         const btnDelete    = document.createElement('button');
+        const imageDelete  = document.createElement('img');
 
         /* The edit and delete button */
         btnEdit.id              = 'prj-btn-edit-'+prj.getId();
         btnEdit.className       = 'prj-btn-edit';
-        btnEdit.innerText       = 'Edit this project';
+        //btnEdit.innerText       = 'Edit this project';
+        imageEdit.src           = editImage;
+        imageEdit.className     = 'edit-image';
+
         btnDelete.id            = 'prj-btn-delete-'+prj.getId();
         btnDelete.className     = 'prj-btn-delete';
-        btnDelete.innerText     = 'delete this project';
+        //btnDelete.innerText     = 'delete this project';
+        imageDelete.src         = deleteImage;
+        imageDelete.className   = 'delete-image';
 
         /* The className of the rest of the elements */
         prjCard.className       = 'prj-card';
         prjCardTitle.className  = 'prj-card-title';
         prjCardDesc.className   = 'prj-card-desc';
         prjCardHr.className     = 'prj-card-separator';
+        prjCardDiv.className    = 'prj-todos-list-holder';
         prjCardTodos.className  = 'prj-todos-list';
         prjCardBtns.className   = 'prj-button-holder';
         
@@ -144,10 +155,15 @@ export const manageData = (() => {
         if (todo3 != undefined && todo3 != null) {
             printTodoSimple(todo3, prjCardTodos);
         }
+        
+
+        btnEdit.appendChild(imageEdit);
+        btnDelete.appendChild(imageDelete);
 
         prjCardBtns.append(btnEdit, btnDelete);
+        prjCardDiv.appendChild(prjCardTodos);
 
-        prjCard.append(prjCardTitle, prjCardDesc, prjCardHr, prjCardTodos, prjCardBtns);
+        prjCard.append(prjCardTitle, prjCardDesc, prjCardHr, prjCardDiv, prjCardBtns);
         node.appendChild(prjCard);
 
     };
@@ -202,7 +218,9 @@ export const manageData = (() => {
         const cardLabel    = document.createElement('label');
         const cardCheck    = document.createElement('input');
         const cardSlider   = document.createElement('span');
-
+        
+        const imageEdit    = document.createElement('img');
+        const imageDelete  = document.createElement('img');
         const btnEdit      = document.createElement('button');
         const btnDelete    = document.createElement('button');
 
@@ -217,10 +235,14 @@ export const manageData = (() => {
         /* The delete and edit button */
         btnEdit.id              = 'btn-edit-'+toDo.getId();
         btnEdit.className       = 'btn-edit';
-        btnEdit.innerText       = 'Edit task';
+        imageEdit.src           = editImage;
+        imageEdit.className     = 'edit-image';
+
         btnDelete.id            = 'btn-delete-'+toDo.getId();
         btnDelete.className     = 'btn-delete';
-        btnDelete.innerText     = 'Delete task';
+        imageDelete.src         = deleteImage;
+        imageDelete.className   = 'delete-image';
+
 
 
         /* All classes (except check) and some id. */
@@ -252,6 +274,8 @@ export const manageData = (() => {
         
         clickDiv.append(cardTitle, cardDueDate, cardPriority);
         cardLabel.append(cardCheck,cardSlider);
+        btnEdit.appendChild(imageEdit);
+        btnDelete.appendChild(imageDelete);
         visibleDiv.append(cardLabel, clickDiv, btnEdit, btnDelete);
         toggleDiv.appendChild(cardDesc);
         todoCard.append(visibleDiv, toggleDiv); 

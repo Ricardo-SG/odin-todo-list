@@ -1,6 +1,13 @@
 /* variables */
+$color1:#15a585 ;
+$color2: #61bf85 ;
+$color3: #9ad786 ;
+$color4: #d4ed8c;
+
+
+
 $blue: #c7e1f7;
-$bground: #dffff9;
+$bground:#15a585;
 $purple: rgba(170, 50, 220, .6);
 $grey: rgba(138, 126, 143, 0.6);
 $text-shadow8:   0.07em 0 black,
@@ -15,11 +22,41 @@ $text-shadow4:   0.07em 0 black,
                 0 0.07em black,
                 -0.07em 0 black,
                 0 -0.07em black;
-$text-shadow1:   0.07em 0 #fffe00;
+$text-shadow1:   2px 0 #ffc300;
 
-/* imports */
-@import url('http://fonts.cdnfonts.com/css/optima');
-@import url('http://fonts.cdnfonts.com/css/allan');
+/* Font families */
+@font-face {
+  font-family: 'Allen';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    url('./fonts/Allan-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'OPTIMA';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    url('./fonts/OPTIMA.TTF');
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    url('./fonts/Helvetica\ Neue\ Medium\ Extended.ttf');
+}
+
+@font-face {
+  font-family: 'ReenieBeanie';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    url('./fonts/ReenieBeanie-Regular.ttf');
+}
+
 
 /* código css */
 
@@ -30,7 +67,7 @@ $text-shadow1:   0.07em 0 #fffe00;
 }
 
 body {
-  background-color:$bground;
+  background-color:#9eafeb;
   min-width: 600px;
 }
 
@@ -54,7 +91,8 @@ body {
     .web-title {
       font-size: 1rem;
       font-family: 'Helvetica Neue', sans-serif;
-      background-color: #0e293f;
+      background-color: navy;
+      font-weight:bold;
       color:whitesmoke;
       text-align: center;
       //margin-left:100px;
@@ -70,7 +108,7 @@ body {
       .project-title {
 
         font-size:4rem;
-        font-family: 'Optima', sans-serif;
+        font-family: 'OPTIMA', sans-serif;
         color:navy;
     }
 
@@ -80,7 +118,7 @@ body {
       background-color: #0563af;
       color: white;
       padding: 12px;
-      width: 200px;
+      min-width: 200px;
       border: none;
       font-size: 20px;
       box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
@@ -117,6 +155,7 @@ body {
 }
 
 #board-content {
+    text-align: center;
     margin:8px;
     margin-top:15px;
     padding:8px;
@@ -142,7 +181,7 @@ body {
       justify-content: space-evenly;
       align-items: center;
 
-      font-family:'Reenie Beanie', sans-serif; // import font
+      font-family:'ReenieBeanie', sans-serif; // import font
       
       text-align:center;
       
@@ -161,16 +200,16 @@ body {
     .prj-card-title {
       text-align: center;
       font-size:46px;
-      color:rgb(167, 137, 41);
-      text-shadow: $text-shadow1;
+      color:black;
+      //text-shadow: $text-shadow1;
     }
   
     .prj-card-desc {
       padding:6px;
       font-size:20px;
-      color:rgb(167, 137, 41);
-      color:#b3bf0d;
-      text-shadow: $text-shadow1;
+      color: black;
+      
+    //  text-shadow: $text-shadow1;
     }
     .prj-card p {
       padding:5px;
@@ -181,6 +220,10 @@ body {
       margin-top: 10px;
       margin-bottom:10px;
     }
+    .prj-todos-list-holder {
+      text-align:initial;
+      width:100%;
+    }
 
     .prj-todos-list {
       //margin-top:20px;
@@ -189,8 +232,23 @@ body {
       }
 
     .prj-button-holder {
+      display:flex;
+      width:100px;
+      justify-content:space-between;
       margin-top:20px;
+    
+      img {
+        height:40px;
+      }
+      button {
+        //background-color: #15a585;
+        background-color: #fdfd86;
+        border:none;
+        border-radius: 10px;
+        cursor:pointer;
+      }
     }
+
   }
   
 
@@ -206,15 +264,15 @@ body {
         margin-top:15px;
         margin-bottom:15px;
         
-        outline: 8px ridge $purple;
+        //outline: 8px ridge $purple;
         border-radius: 2rem;
-        background-color:$grey; 
+        background-color:#6a76c8;
         
-        font-family: 'Allan', sans-serif;
+        font-family: 'Allen', sans-serif;
         
         .main-todo {
             display:flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items:center;
         }
         .click-todo {
@@ -233,6 +291,7 @@ body {
                 margin-left: 15px;
                 margin-right: 15px; 
                 margin-bottom:15px;    
+                text-align:left;
             }
         }
 
@@ -240,6 +299,8 @@ body {
             font-size: 1.5rem;
             margin-left: 15px;
             margin-right: 15px;
+            min-width:500px;
+            text-align:left;
         }
 
         .card-due-date {
@@ -250,7 +311,21 @@ body {
 
         div[class^='priority'] {
             font-size:1.5rem;
+            min-width:100px;
+            text-align:left;
 
+        }
+
+        img {
+          height:40px;
+        }
+        button {
+          //background-color: #15a585;
+          background-color:#6a76c8;
+          border:none;
+          border-radius: 10px;
+          margin-right:5px;
+          cursor:pointer;
         }
 
 
@@ -258,10 +333,11 @@ body {
 }
 
 #project-div-form {
-  position:absolute;
+  position:fixed;
   z-index:2;
-  left:25%;
-  top:25%;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
   background:black;
   border: 3px solid #f1f1f1;
   padding: 10px;
@@ -278,6 +354,14 @@ body {
     width: 300px;
     height: 100px;
   }
+ 
+ #project-form {
+  display:flex;
+  flex-direction: column;
+ }
+
+
+
 
   #btn-prj-form-confirm, 
   #btn-prj-form-edit, 
@@ -328,10 +412,11 @@ body {
 
 #div-form {
  
-  position:absolute;
+  position:fixed;
   z-index:2;
-  left:25%;
-  top:25%;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
   background:black;
   border: 3px solid #f1f1f1;
   padding: 10px;
@@ -407,6 +492,9 @@ body {
 
 
 
+#btn-new-prj, #btn-new-todo {
+  width:250px;
+}
 
 
 /* the CSS for the checkboxes */
@@ -474,6 +562,10 @@ body {
     border-radius: 50%;
   }
 
+.form-button-container {
+  display:flex;
+  gap:10px;
+}
 
 .grid-div {
   // since we need invisible to be stronger...we gotta put the grid css here...
@@ -493,3 +585,110 @@ body {
 .striked {
   text-decoration: line-through;
 }
+
+
+
+/* The fancy button code. I've copied it from:
+https://www.joshwcomeau.com/animation/3d-button/#our-strategy
+I made some modifications of my own, to get blue, green and red
+*/
+
+.pushable {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  width:100%;
+  height:50px;
+}
+.shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+.edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  
+}
+
+.front {
+  display: block;
+  position: relative;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  color: white;
+  will-change: transform;
+  transform: translateY(-4px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+
+.blue {
+  //background: rgba(0, 100, 240, 0.973);
+  background:navy;
+}
+
+.blue-grad {
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 82,  1) 0%,
+    rgba(0, 0, 163, 1) 8%,
+    rgba(0, 0, 163, 1) 92%,
+    rgba(0, 0, 82,  1) 100%
+  );
+}
+
+
+
+.pushable:hover {
+  filter: brightness(110%);
+}
+.pushable:hover .front {
+  transform: translateY(-6px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+.pushable:active .front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+.pushable:hover .shadow {
+  transform: translateY(4px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+.pushable:active .shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+.pushable:focus:not(:focus-visible) {
+  outline: none;
+}
+
