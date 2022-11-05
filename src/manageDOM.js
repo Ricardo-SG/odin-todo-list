@@ -78,8 +78,6 @@ export const manageData = (() => {
 
     const setVisible = (node, mode) => {
 
-        const nodeClass = node.className;
-
         switch(mode) {
         case true:
             if ((node.className).includes('invisible')) {
@@ -288,18 +286,6 @@ export const manageData = (() => {
         toggleDiv.addEventListener('click', () => {
             toggleDiv.classList.toggle('invisible');
         });
-
-        /* this changes the ToDo as done or not done 
-        cardCheck.addEventListener('click', () => {
-            toDo.toggleState();
-            cardCheck.classList.toggle  ('checked');
-            cardTitle.classList.toggle  ('striked');
-            cardDueDate.classList.toggle('striked');
-            cardDesc.classList.toggle   ('striked');
-            prj.sortToDos();
-            storageData.saveUserData(user);  // we save the user data since we added a new todo
-            setBoard(undefined, prj, node); 
-        });*/
 
     }
     return {setBoard, setSelector, setDashboard, cleanChilds, setVisible};

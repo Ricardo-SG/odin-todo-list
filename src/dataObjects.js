@@ -10,8 +10,6 @@ import { parse, isAfter } from 'date-fns';
 
 /* Its mission is to hold the data relative to the todos */
 export const todoFactory = (title, description, dueDate, priority, idNumber, state) => {
-    //let idNumber;
-    //let state;
     
     const getId = () => {
         return idNumber;
@@ -131,9 +129,6 @@ export const projectFactory = (title, description) => {
     };
 
     const compareState = (a,b) => {
-        console.log('<compareState>');
-        console.log('a.getState(): ' + a.getState());
-        console.log('b.getState(): ' + b.getState());
 
         if (a.getState() == 'undone' && b.getState() == 'done') {
             return -1; 
@@ -222,7 +217,6 @@ export const userFactory = () => {
                     newPrj.addToDo(newToDo);
                 })
 
-                //newPrj.setToDos = prj.toDos;
                 projects.push(newPrj);
 
             })
