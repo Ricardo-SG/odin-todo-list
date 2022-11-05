@@ -1,6 +1,21 @@
 /* variables */
+$blue: #c7e1f7;
+$bground: #dffff9;
 $purple: rgba(170, 50, 220, .6);
 $grey: rgba(138, 126, 143, 0.6);
+$text-shadow8:   0.07em 0 black,
+                0 0.07em black,
+                -0.07em 0 black,
+                0 -0.07em black,
+                -0.07em -0.07em black,
+                -0.07em 0.07em black,
+                0.07em -0.07em black,
+                0.07em 0.07em black;
+$text-shadow4:   0.07em 0 black,
+                0 0.07em black,
+                -0.07em 0 black,
+                0 -0.07em black;
+$text-shadow1:   0.07em 0 #fffe00;
 
 /* imports */
 @import url('http://fonts.cdnfonts.com/css/optima');
@@ -14,6 +29,10 @@ $grey: rgba(138, 126, 143, 0.6);
     padding: 0;
 }
 
+body {
+  background-color:$bground;
+  min-width: 600px;
+}
 
 .blocker {
   position:absolute;
@@ -25,47 +44,88 @@ $grey: rgba(138, 126, 143, 0.6);
 
 
 #header {
-    margin:8px;
-    padding:8px;
-    outline: 8px ridge $purple;
-    border-radius: 2rem;
-    background-color:$grey;
-    min-width:600px;
-      
+  
+    //margin:8px;
+    //padding:8px;
+    //outline: 8px ridge $purple;
+    //border-radius: 2rem;
+    //background-color:$grey;
+    //min-width:600px;
+    .web-title {
+      font-size: 1rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #0e293f;
+      color:whitesmoke;
+      text-align: center;
+      //margin-left:100px;
+  }
+  
+  .sub-header {
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left:10px;
+      margin-right:10px;
+
+      .project-title {
+
+        font-size:4rem;
+        font-family: 'Optima', sans-serif;
+        color:navy;
+    }
+
+    /* The selector styles */
+    
+    #project-selector {
+      background-color: #0563af;
+      color: white;
+      padding: 12px;
+      width: 200px;
+      border: none;
+      font-size: 20px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+      -webkit-appearance: button;
+      appearance: button;
+      outline: none;
+    }
+    
+    #project-selector::before {
+      content: "\f13a";
+      //font-family: FontAwesome;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20%;
+      height: 100%;
+      text-align: center;
+      font-size: 28px;
+      line-height: 45px;
+      color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+    
+    #project-selector:hover::before {
+      color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    #project-selector select option {
+      padding: 30px;
+    }
+  }
 }
-
-.web-title {
-    font-size: 4rem;
-    font-family: 'Helvetica Neue', sans-serif;
-    margin-left:100px;
-}
-
-.sub-header {
-    display:flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.project-title {
-
-    font-size:2rem;
-    font-family: 'Optima', sans-serif;
-}
-
-// .project-selector {
-
-// }
 
 #board-content {
     margin:8px;
     margin-top:15px;
     padding:8px;
-    outline: 8px ridge $purple;
-    border-radius: 2rem;
-    background-color:$grey;
+    //outline: 8px ridge $purple;
+    //border-radius: 2rem;
+    //background-color:$grey;
 
-    min-height:1000px;
-    min-width:600px;
+    //min-height:1000px;
+  
 
 
   #dashboard-div {
@@ -77,29 +137,61 @@ $grey: rgba(138, 126, 143, 0.6);
 
 
     .prj-card {
-      background-color: #FFFFFF;
+      display:flex;
+      flex-direction:column;
+      justify-content: space-evenly;
+      align-items: center;
+
+      font-family:'Reenie Beanie', sans-serif; // import font
+      
+      text-align:center;
+      
+      line-height: 1;  
+      border:1px solid #E8E8E8;  
+      border-top:10px solid #fdfd86;  
+      border-bottom-right-radius: 60px 5px;
+      box-shadow:10px 10px 5px rgba(0, 0, 0, 0.40);
+
+      background: linear-gradient(135deg, #ffff88 81%,#ffff88 82%,#ffff88 82%,#ffffc6 100%);
       color: black;
-      font-weight: normal;
-      font-size: 18px;
-      padding:5px;
-    
+      padding:10px;
+  
     }
+    
     .prj-card-title {
       text-align: center;
+      font-size:46px;
+      color:rgb(167, 137, 41);
+      text-shadow: $text-shadow1;
     }
   
     .prj-card-desc {
       padding:6px;
+      font-size:20px;
+      color:rgb(167, 137, 41);
+      color:#b3bf0d;
+      text-shadow: $text-shadow1;
     }
     .prj-card p {
       padding:5px;
     }
+    .prj-card-separator {
+      width: 80%;
+      border: 2px double #c59d5f;
+      margin-top: 10px;
+      margin-bottom:10px;
+    }
 
     .prj-todos-list {
+      //margin-top:20px;
       margin-left:10%;
-
+      font-size:15px;
       }
+
+    .prj-button-holder {
+      margin-top:20px;
     }
+  }
   
 
  
@@ -388,7 +480,7 @@ $grey: rgba(138, 126, 143, 0.6);
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap:15px;
-  background-color: #bccbde;
+  
 }
 
 /* Clases generales */

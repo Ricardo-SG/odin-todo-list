@@ -101,6 +101,7 @@ export const manageData = (() => {
         const prjCard      = document.createElement('div');
         const prjCardTitle = document.createElement('H1');
         const prjCardDesc  = document.createElement('p');
+        const prjCardHr    = document.createElement('hr');
         const prjCardTodos = document.createElement('ul');
         const prjCardBtns  = document.createElement('div');
         const btnEdit      = document.createElement('button');
@@ -118,6 +119,7 @@ export const manageData = (() => {
         prjCard.className       = 'prj-card';
         prjCardTitle.className  = 'prj-card-title';
         prjCardDesc.className   = 'prj-card-desc';
+        prjCardHr.className     = 'prj-card-separator';
         prjCardTodos.className  = 'prj-todos-list';
         prjCardBtns.className   = 'prj-button-holder';
         
@@ -145,7 +147,7 @@ export const manageData = (() => {
 
         prjCardBtns.append(btnEdit, btnDelete);
 
-        prjCard.append(prjCardTitle, prjCardDesc, prjCardTodos, prjCardBtns);
+        prjCard.append(prjCardTitle, prjCardDesc, prjCardHr, prjCardTodos, prjCardBtns);
         node.appendChild(prjCard);
 
     };

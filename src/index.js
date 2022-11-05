@@ -51,7 +51,8 @@ function loadUser() {
 
     // We check if we can access local storage and if we can, we load data into user from the storage.
     if (storageData.storageAvailable('localStorage')) {
-        if (user.getProjectNumber > 0) {   
+        const userData = storageData.loadUserData();
+        if (userData != null) {   
             user.setProjects(storageData.loadUserData());
             user.setProjectsId();
         }
