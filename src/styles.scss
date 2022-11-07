@@ -1,30 +1,15 @@
-/* variables */
+/* Gamma of colors if I want to make the website green 
 $color1:#15a585 ;
 $color2: #61bf85 ;
 $color3: #9ad786 ;
 $color4: #d4ed8c;
+Background should be #333.
+*/
 
 
 
-$blue: #c7e1f7;
-$bground:#15a585;
-$purple: rgba(170, 50, 220, .6);
-$grey: rgba(138, 126, 143, 0.6);
-$text-shadow8:   0.07em 0 black,
-                0 0.07em black,
-                -0.07em 0 black,
-                0 -0.07em black,
-                -0.07em -0.07em black,
-                -0.07em 0.07em black,
-                0.07em -0.07em black,
-                0.07em 0.07em black;
-$text-shadow4:   0.07em 0 black,
-                0 0.07em black,
-                -0.07em 0 black,
-                0 -0.07em black;
-$text-shadow1:   2px 0 #ffc300;
 
-/* Font families */
+/* Font families that aren't working to me :( */
 @font-face {
   font-family: 'Allen';
   font-style: normal;
@@ -82,54 +67,50 @@ body {
 
 #header {
   
-    //margin:8px;
-    //padding:8px;
-    //outline: 8px ridge $purple;
-    //border-radius: 2rem;
-    //background-color:$grey;
-    //min-width:600px;
     .web-title {
+      background-color: navy;
+      color: whitesmoke;
+      text-align: center;
+
       font-size: 1rem;
       font-family: 'Helvetica Neue', sans-serif;
-      background-color: navy;
-      font-weight:bold;
-      color:whitesmoke;
-      text-align: center;
-      //margin-left:100px;
+      font-weight: bold;
   }
   
   .sub-header {
-      display:flex;
+      display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-left:10px;
-      margin-right:10px;
+      margin-left: 10px;
+      margin-right: 10px;
 
       .project-title {
-
-        font-size:4rem;
-        font-family: 'OPTIMA', sans-serif;
         color:navy;
+        font-size: 4rem;
+        font-family: 'OPTIMA', sans-serif;
+
     }
 
     /* The selector styles */
     
     #project-selector {
+      
+      min-width: 200px;
       background-color: #0563af;
       color: white;
-      padding: 12px;
-      min-width: 200px;
-      border: none;
-      font-size: 20px;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-      -webkit-appearance: button;
       appearance: button;
       outline: none;
+      border: none;
+      padding: 12px;
+      font-size: 20px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+
     }
     
     #project-selector::before {
       content: "\f13a";
-      //font-family: FontAwesome;
+      color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.1);
       position: absolute;
       top: 0;
       right: 0;
@@ -138,14 +119,12 @@ body {
       text-align: center;
       font-size: 28px;
       line-height: 45px;
-      color: rgba(255, 255, 255, 0.5);
-      background-color: rgba(255, 255, 255, 0.1);
       pointer-events: none;
     }
     
     #project-selector:hover::before {
-      color: rgba(255, 255, 255, 0.6);
       background-color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.6);
     }
     
     #project-selector select option {
@@ -155,202 +134,229 @@ body {
 }
 
 #board-content {
-    text-align: center;
-    margin:8px;
-    margin-top:15px;
-    padding:8px;
-    //outline: 8px ridge $purple;
-    //border-radius: 2rem;
-    //background-color:$grey;
-
-    //min-height:1000px;
-  
-
-
+  margin:8px;
+  margin-top:15px;
+  padding:8px;  
+  text-align: center;
+    
   #dashboard-div {
+    color: white;
     padding: 15px;
     font-size: 32px;
     font-family: Helvetica;
     font-weight: bold;
-    color: white;
-
 
     .prj-card {
+      background: linear-gradient(135deg, #ffff88 81%,#ffff88 82%,#ffff88 82%,#ffffc6 100%);
+      color: black;
+      
       display:flex;
       flex-direction:column;
       justify-content: space-evenly;
       align-items: center;
-
+      padding:10px;
+      
       font-family:'ReenieBeanie', sans-serif; // import font
-      
       text-align:center;
-      
-      line-height: 1;  
+      line-height: 1; 
       border:1px solid #E8E8E8;  
       border-top:10px solid #fdfd86;  
       border-bottom-right-radius: 60px 5px;
       box-shadow:10px 10px 5px rgba(0, 0, 0, 0.40);
-
-      background: linear-gradient(135deg, #ffff88 81%,#ffff88 82%,#ffff88 82%,#ffffc6 100%);
-      color: black;
-      padding:10px;
-  
     }
     
     .prj-card-title {
+      color:black;
       text-align: center;
       font-size:46px;
-      color:black;
-      //text-shadow: $text-shadow1;
     }
   
     .prj-card-desc {
+      color: black; 
       padding:6px;
       font-size:20px;
-      color: black;
-      
-    //  text-shadow: $text-shadow1;
     }
+
     .prj-card p {
       padding:5px;
     }
+
     .prj-card-separator {
       width: 80%;
       border: 2px double #c59d5f;
       margin-top: 10px;
-      margin-bottom:10px;
+      margin-bottom: 10px;
     }
     .prj-todos-list-holder {
-      text-align:initial;
-      width:100%;
+      text-align: initial;
+      width: 100%;
     }
 
     .prj-todos-list {
-      //margin-top:20px;
-      margin-left:10%;
-      font-size:15px;
-      }
+      margin-left: 10%;
+      font-size: 15px;
+    }
 
     .prj-button-holder {
-      display:flex;
-      width:100px;
-      justify-content:space-between;
-      margin-top:20px;
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
     
       img {
         height:40px;
       }
       button {
-        //background-color: #15a585;
         background-color: #fdfd86;
-        border:none;
+        border: none;
         border-radius: 10px;
-        cursor:pointer;
+        cursor: pointer;
+      }
+      .btn-delete {
+        margin-right:19px;
       }
     }
 
   }
-  
 
- 
+  .todo-card {
+    background-color:#6a76c8;
 
-    .todo-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
 
-        display:flex;
-        flex-direction:column;
-        justify-content:flex-start;
-        align-items: left;
-
-        margin-top:15px;
-        margin-bottom:15px;
-        
-        //outline: 8px ridge $purple;
-        border-radius: 2rem;
-        background-color:#6a76c8;
-        
-        font-family: 'Allen', sans-serif;
-        
-        .main-todo {
-            display:flex;
-            justify-content: flex-start;
-            align-items:center;
-        }
-        .click-todo {
-            height: 50px;
-            display:flex;
-            justify-content: flex-start;
-            align-items:center;
-            cursor:pointer;
-        }
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 2rem;
+    font-family: 'Allen', sans-serif;
     
+    @media (min-width: 800px) { // desktop
+      .main-todo {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+      }
+      .click-todo {
+          height: 50px;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          cursor: pointer;
+      }
 
-        .toggle-todo {
-
-            .card-description {
-                font-size: 1rem;
-                margin-left: 15px;
-                margin-right: 15px; 
-                margin-bottom:15px;    
-                text-align:left;
-            }
+      .toggle-todo {
+        .card-description {
+          font-size: 1rem;
+          margin-left: 15px;
+          margin-right: 15px; 
+          margin-bottom: 15px;    
+          text-align: left;
         }
+      }
 
-        .card-title {
-            font-size: 1.5rem;
-            margin-left: 15px;
-            margin-right: 15px;
-            min-width:500px;
-            text-align:left;
-        }
+      .card-title {
+        min-width: 500px;
+        margin-left: 15px;
+        margin-right: 15px;
+        font-size: 1.5rem;
+        text-align: left;
+      }
 
-        .card-due-date {
-            font-size:1.5rem;
-            margin-left:15px;
-            margin-right:15px;
-        }
+      .card-due-date {
+          font-size: 1.5rem;
+          margin-left: 15px;
+          margin-right: 15px;
+      }
 
-        div[class^='priority'] {
-            font-size:1.5rem;
-            min-width:100px;
-            text-align:left;
-
-        }
-
-        img {
-          height:40px;
-        }
-        button {
-          //background-color: #15a585;
-          background-color:#6a76c8;
-          border:none;
-          border-radius: 10px;
-          margin-right:5px;
-          cursor:pointer;
-        }
-
-
+      div[class^='priority'] {
+        min-width:100px;  
+        font-size:1.5rem;
+        text-align:left;
+      }  
     }
+    @media (max-width: 800px) { // cellphones and tablets
+      .main-todo {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+      }
+      .click-todo {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          cursor: pointer;
+      }
+
+      .toggle-todo {
+        .card-description {
+          margin-left: 15px;
+          margin-right: 15px; 
+          margin-bottom: 15px;    
+          text-align: left;
+        }
+      }
+
+      .card-title {
+        min-width:200px;
+        margin-left: 15px;
+        margin-right: 15px;
+        text-align: left;
+      }
+
+      .card-due-date {
+          min-width: 81px;
+          margin-left: 15px;
+          margin-right: 15px;
+      }
+
+      div[class^='priority'] {
+        min-width:100px;  
+        text-align:left;
+      }  
+      .btn-delete {
+        margin-right:19px;
+      }
+    }
+      
+
+
+      img {
+        height:40px;
+      }
+      button {
+        background-color: #6a76c8;
+        border: none;
+        border-radius: 10px;
+        margin-right: 5px;
+        cursor: pointer;
+      }
+
+
+  }
 }
 
 #project-div-form {
-  position:fixed;
-  z-index:2;
-  left:50%;
-  top:50%;
-  transform: translate(-50%, -50%);
-  background:black;
-  border: 3px solid #f1f1f1;
-  padding: 10px;
   background-color: white;
+  
+  position: fixed;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  
+  padding: 10px;
+  border: 3px solid #f1f1f1;
   border-radius: 5px;
 
   #prj-title {
-    display:inline-block;
+    display: inline-block;
   }
 
   #prj-desc {
-    display:block;
-    margin:auto;
+    display: block;
+    margin: auto;
     width: 300px;
     height: 100px;
   }
@@ -360,15 +366,9 @@ body {
   flex-direction: column;
  }
 
-
-
-
   #btn-prj-form-confirm, 
   #btn-prj-form-edit, 
   #btn-prj-form-cancel {
-    //display:block;
-    //margin:auto;
- 
     background-color: #04AA6D;
     color: white;
     padding: 16px 20px;
@@ -490,12 +490,9 @@ body {
   }
 }
 
-
-
 #btn-new-prj, #btn-new-todo {
   width:250px;
 }
-
 
 /* the CSS for the checkboxes */
 /* The switch - the box around the slider */
