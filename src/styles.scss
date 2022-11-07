@@ -6,95 +6,88 @@ $color4: #d4ed8c;
 Background should be #333.
 */
 
-
-
-
 /* Font families that aren't working to me :( */
-@font-face {
-  font-family: 'Allen';
-  font-style: normal;
-  font-weight: normal;
-  src:
-    url('./fonts/Allan-Regular.ttf');
-}
+// @font-face {
+//   font-family: 'Allan';
+//   font-style: normal;
+//   font-weight: normal;
+//   src: url('fonts/Allan-Regular.ttf') format('ttf');
+// }
 
-@font-face {
-  font-family: 'OPTIMA';
-  font-style: normal;
-  font-weight: normal;
-  src:
-    url('./fonts/OPTIMA.TTF');
-}
+// @font-face {
+//   font-family: 'optima';
+//   font-style: normal;
+//   font-weight: normal;
+//   src: url('fonts/optima.ttf') format('ttf');
+// }
 
-@font-face {
-  font-family: 'Helvetica Neue';
-  font-style: normal;
-  font-weight: normal;
-  src:
-    url('./fonts/Helvetica\ Neue\ Medium\ Extended.ttf');
-}
+// @font-face {
+//   font-family: 'Helvetica Neue';
+//   font-style: normal;
+//   font-weight: normal;
+//   src: url('fonts/Helvetica Neue Medium Extended.ttf') format('ttf');
+// }
 
-@font-face {
-  font-family: 'ReenieBeanie';
-  font-style: normal;
-  font-weight: normal;
-  src:
-    url('./fonts/ReenieBeanie-Regular.ttf');
-}
+// @font-face {
+//   font-family: 'ReenieBeanie';
+//   font-style: normal;
+//   font-weight: normal;
+//   src: url('./fonts/ReenieBeanie-Regular.ttf') format('ttf');
+// }
 
+@import url('https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap');
+@import url('https://fonts.cdnfonts.com/css/optima');
+@import url('https://fonts.cdnfonts.com/css/allan');
+@import url('https://fonts.cdnfonts.com/css/helvetica-neue-9');
 
 /* código css */
 
 * {
-    box-sizing:border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background-color:#9eafeb;
+  background-color: #9eafeb;
   min-width: 600px;
 }
 
 .blocker {
-  position:absolute;
+  position: absolute;
   background-color: hsla(0, 0%, 0%, 0.438);
-  height:100vh;
-  width:100vw;
-  z-index:2;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2;
 }
 
-
 #header {
-  
-    .web-title {
-      background-color: navy;
-      color: whitesmoke;
-      text-align: center;
+  .web-title {
+    background-color: navy;
+    color: whitesmoke;
+    text-align: center;
 
-      font-size: 1rem;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-weight: bold;
+    font-size: 1rem;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: bold;
   }
-  
+
   .sub-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-left: 10px;
-      margin-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
 
-      .project-title {
-        color:navy;
-        font-size: 4rem;
-        font-family: 'OPTIMA', sans-serif;
-
+    .project-title {
+      color: navy;
+      font-size: 4rem;
+      font-family: 'OPTIMA', sans-serif;
     }
 
     /* The selector styles */
-    
+
     #project-selector {
-      
       min-width: 200px;
       background-color: #0563af;
       color: white;
@@ -104,11 +97,10 @@ body {
       padding: 12px;
       font-size: 20px;
       box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-
     }
-    
+
     #project-selector::before {
-      content: "\f13a";
+      content: '\f13a';
       color: rgba(255, 255, 255, 0.5);
       background-color: rgba(255, 255, 255, 0.1);
       position: absolute;
@@ -121,12 +113,12 @@ body {
       line-height: 45px;
       pointer-events: none;
     }
-    
+
     #project-selector:hover::before {
       background-color: rgba(255, 255, 255, 0.2);
       color: rgba(255, 255, 255, 0.6);
     }
-    
+
     #project-selector select option {
       padding: 30px;
     }
@@ -134,51 +126,60 @@ body {
 }
 
 #board-content {
-  margin:8px;
-  margin-top:15px;
-  padding:8px;  
+  margin: 8px;
+  margin-top: 15px;
+  padding: 8px;
   text-align: center;
-    
+
   #dashboard-div {
     color: white;
     padding: 15px;
     font-size: 32px;
-    font-family: Helvetica;
+    font-family: 'Helvetica Neue', sans-serif;
     font-weight: bold;
 
     .prj-card {
-      background: linear-gradient(135deg, #ffff88 81%,#ffff88 82%,#ffff88 82%,#ffffc6 100%);
+      background: linear-gradient(
+        135deg,
+        #ffff88 81%,
+        #ffff88 82%,
+        #ffff88 82%,
+        #ffffc6 100%
+      );
       color: black;
-      
-      display:flex;
-      flex-direction:column;
+
+      display: flex;
+      flex-direction: column;
       justify-content: space-evenly;
       align-items: center;
-      padding:10px;
-      
-      font-family:'ReenieBeanie', sans-serif; // import font
-      text-align:center;
-      line-height: 1; 
-      border:1px solid #E8E8E8;  
-      border-top:10px solid #fdfd86;  
-      border-bottom-right-radius: 60px 5px;
-      box-shadow:10px 10px 5px rgba(0, 0, 0, 0.40);
-    }
-    
-    .prj-card-title {
-      color:black;
+      padding: 10px;
+
+      //font-family:'ReenieBeanie', sans-serif; // import font
+
       text-align: center;
-      font-size:46px;
+      line-height: 1;
+      border: 1px solid #e8e8e8;
+      border-top: 10px solid #fdfd86;
+      border-bottom-right-radius: 60px 5px;
+      box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.4);
     }
-  
+
+    .prj-card-title {
+      color: black;
+      text-align: center;
+      font-size: 46px;
+      font-family: 'Reenie Beanie', cursive;
+    }
+
     .prj-card-desc {
-      color: black; 
-      padding:6px;
-      font-size:20px;
+      font-family: 'Optima', sans-serif;
+      color: black;
+      padding: 6px;
+      font-size: 20px;
     }
 
     .prj-card p {
-      padding:5px;
+      padding: 5px;
     }
 
     .prj-card-separator {
@@ -193,6 +194,7 @@ body {
     }
 
     .prj-todos-list {
+      font-family: 'Allan', sans-serif;
       margin-left: 10%;
       font-size: 15px;
     }
@@ -202,9 +204,9 @@ body {
       display: flex;
       justify-content: space-between;
       margin-top: 20px;
-    
+
       img {
-        height:40px;
+        height: 40px;
       }
       button {
         background-color: #fdfd86;
@@ -213,14 +215,13 @@ body {
         cursor: pointer;
       }
       .btn-delete {
-        margin-right:19px;
+        margin-right: 19px;
       }
     }
-
   }
 
   .todo-card {
-    background-color:#6a76c8;
+    background-color: #6a76c8;
 
     display: flex;
     flex-direction: column;
@@ -231,27 +232,28 @@ body {
     margin-bottom: 15px;
     border-radius: 2rem;
     font-family: 'Allen', sans-serif;
-    
-    @media (min-width: 800px) { // desktop
+
+    @media (min-width: 800px) {
+      // desktop
       .main-todo {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
       }
       .click-todo {
-          height: 50px;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          cursor: pointer;
+        height: 50px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
       }
 
       .toggle-todo {
         .card-description {
           font-size: 1rem;
           margin-left: 15px;
-          margin-right: 15px; 
-          margin-bottom: 15px;    
+          margin-right: 15px;
+          margin-bottom: 15px;
           text-align: left;
         }
       }
@@ -265,87 +267,84 @@ body {
       }
 
       .card-due-date {
-          font-size: 1.5rem;
-          margin-left: 15px;
-          margin-right: 15px;
+        font-size: 1.5rem;
+        margin-left: 15px;
+        margin-right: 15px;
       }
 
       div[class^='priority'] {
-        min-width:100px;  
-        font-size:1.5rem;
-        text-align:left;
-      }  
+        min-width: 100px;
+        font-size: 1.5rem;
+        text-align: left;
+      }
     }
-    @media (max-width: 800px) { // cellphones and tablets
+    @media (max-width: 800px) {
+      // cellphones and tablets
       .main-todo {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
       }
       .click-todo {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          cursor: pointer;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
       }
 
       .toggle-todo {
         .card-description {
           margin-left: 15px;
-          margin-right: 15px; 
-          margin-bottom: 15px;    
+          margin-right: 15px;
+          margin-bottom: 15px;
           text-align: left;
         }
       }
 
       .card-title {
-        min-width:200px;
+        min-width: 200px;
         margin-left: 15px;
         margin-right: 15px;
         text-align: left;
       }
 
       .card-due-date {
-          min-width: 81px;
-          margin-left: 15px;
-          margin-right: 15px;
+        min-width: 81px;
+        margin-left: 15px;
+        margin-right: 15px;
       }
 
       div[class^='priority'] {
-        min-width:100px;  
-        text-align:left;
-      }  
+        min-width: 100px;
+        text-align: left;
+      }
       .btn-delete {
-        margin-right:19px;
+        margin-right: 19px;
       }
     }
-      
 
-
-      img {
-        height:40px;
-      }
-      button {
-        background-color: #6a76c8;
-        border: none;
-        border-radius: 10px;
-        margin-right: 5px;
-        cursor: pointer;
-      }
-
-
+    img {
+      height: 40px;
+    }
+    button {
+      background-color: #6a76c8;
+      border: none;
+      border-radius: 10px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
   }
 }
 
 #project-div-form {
   background-color: white;
-  
+
   position: fixed;
   z-index: 2;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  
+
   padding: 10px;
   border: 3px solid #f1f1f1;
   border-radius: 5px;
@@ -360,27 +359,27 @@ body {
     width: 300px;
     height: 100px;
   }
- 
- #project-form {
-  display:flex;
-  flex-direction: column;
- }
 
-  #btn-prj-form-confirm, 
-  #btn-prj-form-edit, 
+  #project-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #btn-prj-form-confirm,
+  #btn-prj-form-edit,
   #btn-prj-form-cancel {
-    background-color: #04AA6D;
+    background-color: #04aa6d;
     color: white;
     padding: 16px 20px;
     border: none;
     cursor: pointer;
     width: 50%;
-    margin-top:10px;
+    margin-top: 10px;
     opacity: 0.7;
   }
-   
-  #btn-form-confirm:hover, 
-  #btn-form-edit:hover, 
+
+  #btn-form-confirm:hover,
+  #btn-form-edit:hover,
   #btn-form-cancel:hover {
     opacity: 1;
   }
@@ -391,11 +390,11 @@ body {
     padding: 5px;
     border-radius: 5px;
   }
-  
+
   input:invalid {
     border-color: red;
   }
-  
+
   input:valid {
     border-color: green;
   }
@@ -403,65 +402,61 @@ body {
   select:invalid {
     border-color: red;
   }
-  
+
   select:valid {
     border-color: green;
   }
 }
 
-
 #div-form {
- 
-  position:fixed;
-  z-index:2;
-  left:50%;
-  top:50%;
+  position: fixed;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  background:black;
+  background: black;
   border: 3px solid #f1f1f1;
   padding: 10px;
   background-color: white;
   border-radius: 5px;
 
   #input-title {
-    display:inline-block;
-
+    display: inline-block;
   }
   #input-date {
-    display:inline-block;
+    display: inline-block;
   }
   #input-priority {
-    display:inline-block;
+    display: inline-block;
     border-radius: 5px;
     border: 2px solid;
     margin-bottom: 15px;
     padding: 5px;
   }
   #input-desc {
-    display:block;
-    margin:auto;
+    display: block;
+    margin: auto;
     width: 300px;
     height: 100px;
-    
   }
-  #btn-form-confirm, 
-  #btn-form-edit, 
+  #btn-form-confirm,
+  #btn-form-edit,
   #btn-form-cancel {
     //display:block;
     //margin:auto;
- 
-    background-color: #04AA6D;
+
+    background-color: #04aa6d;
     color: white;
     padding: 16px 20px;
     border: none;
     cursor: pointer;
     width: 50%;
-    margin-top:10px;
+    margin-top: 10px;
     opacity: 0.7;
   }
-   
-  #btn-form-confirm:hover, 
-  #btn-form-edit:hover, 
+
+  #btn-form-confirm:hover,
+  #btn-form-edit:hover,
   #btn-form-cancel:hover {
     opacity: 1;
   }
@@ -472,11 +467,11 @@ body {
     padding: 5px;
     border-radius: 5px;
   }
-  
+
   input:invalid {
     border-color: red;
   }
-  
+
   input:valid {
     border-color: green;
   }
@@ -484,106 +479,102 @@ body {
   select:invalid {
     border-color: red;
   }
-  
+
   select:valid {
     border-color: green;
   }
 }
 
-#btn-new-prj, #btn-new-todo {
-  width:250px;
+#btn-new-prj,
+#btn-new-todo {
+  width: 250px;
 }
 
 /* the CSS for the checkboxes */
 /* The switch - the box around the slider */
 .switch {
-    position: relative;
-    z-index:1;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #2196F3;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 
 .form-button-container {
-  display:flex;
-  gap:10px;
+  display: flex;
+  gap: 10px;
 }
 
 .grid-div {
   // since we need invisible to be stronger...we gotta put the grid css here...
-  display:grid;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap:15px;
-  
+  gap: 15px;
 }
 
 /* Clases generales */
 .invisible {
-  display:none;
+  display: none;
 }
-
-
 
 .striked {
   text-decoration: line-through;
 }
-
-
 
 /* The fancy button code. I've copied it from:
 https://www.joshwcomeau.com/animation/3d-button/#our-strategy
@@ -598,8 +589,8 @@ I made some modifications of my own, to get blue, green and red
   cursor: pointer;
   outline-offset: 4px;
   transition: filter 250ms;
-  width:100%;
-  height:50px;
+  width: 100%;
+  height: 50px;
 }
 .shadow {
   position: absolute;
@@ -611,10 +602,7 @@ I made some modifications of my own, to get blue, green and red
   background: rgba(0, 0, 0, 0.25);
   will-change: transform;
   transform: translateY(2px);
-  transition:
-    transform
-    600ms
-    cubic-bezier(.3, .7, .4, 1);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
 }
 
 .edge {
@@ -624,7 +612,6 @@ I made some modifications of my own, to get blue, green and red
   width: 100%;
   height: 100%;
   border-radius: 12px;
-  
 }
 
 .front {
@@ -636,39 +623,30 @@ I made some modifications of my own, to get blue, green and red
   color: white;
   will-change: transform;
   transform: translateY(-4px);
-  transition:
-    transform
-    600ms
-    cubic-bezier(.3, .7, .4, 1);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
 }
-
 
 .blue {
   //background: rgba(0, 100, 240, 0.973);
-  background:navy;
+  background: navy;
 }
 
 .blue-grad {
   background: linear-gradient(
     to left,
-    rgba(0, 0, 82,  1) 0%,
+    rgba(0, 0, 82, 1) 0%,
     rgba(0, 0, 163, 1) 8%,
     rgba(0, 0, 163, 1) 92%,
-    rgba(0, 0, 82,  1) 100%
+    rgba(0, 0, 82, 1) 100%
   );
 }
-
-
 
 .pushable:hover {
   filter: brightness(110%);
 }
 .pushable:hover .front {
   transform: translateY(-6px);
-  transition:
-    transform
-    250ms
-    cubic-bezier(.3, .7, .4, 1.5);
+  transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
 }
 .pushable:active .front {
   transform: translateY(-2px);
@@ -676,10 +654,7 @@ I made some modifications of my own, to get blue, green and red
 }
 .pushable:hover .shadow {
   transform: translateY(4px);
-  transition:
-    transform
-    250ms
-    cubic-bezier(.3, .7, .4, 1.5);
+  transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
 }
 .pushable:active .shadow {
   transform: translateY(1px);
@@ -688,4 +663,3 @@ I made some modifications of my own, to get blue, green and red
 .pushable:focus:not(:focus-visible) {
   outline: none;
 }
-
